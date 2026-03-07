@@ -1,10 +1,9 @@
-const complaintService = require('../services/complaintService');
-const { complaintSchema } = require('../validations/zodSchemas');
+const complaintService = require("../services/complaintService");
 
 const complaintController = {
   async getAll(req, res) {
     try {
-      if (req.user.role === 'CITIZEN') {
+      if (req.user.role === "CITIZEN") {
         res.json(await complaintService.getByCitizen(req.user.id));
       } else {
         res.json(await complaintService.getAll());
@@ -16,8 +15,12 @@ const complaintController = {
 
   async create(req, res) {
     try {
-      const data = complaintSchema.parse(req.body);
-      res.status(201).json(await complaintService.create({ citizenId: req.user.id, ...data }));
+      const data = req.body;
+      res
+        .status(201)
+        .json(
+          await complaintService.create({ citizenId: req.user.id, ...data }),
+        );
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

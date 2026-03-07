@@ -1,5 +1,4 @@
-const propertyService = require('../services/propertyService');
-const { propertySchema } = require('../validations/zodSchemas');
+const propertyService = require("../services/propertyService");
 
 const propertyController = {
   async getAll(req, res) {
@@ -14,7 +13,7 @@ const propertyController = {
   async getById(req, res) {
     try {
       const property = await propertyService.getById(req.params.id);
-      if (!property) return res.status(404).json({ error: 'Not found' });
+      if (!property) return res.status(404).json({ error: "Not found" });
       res.json(property);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -23,7 +22,7 @@ const propertyController = {
 
   async create(req, res) {
     try {
-      const data = propertySchema.parse(req.body);
+      const data = req.body;
       data.cahierDeChargePDF = req.files?.cahierDeChargePDF?.[0]?.path;
       data.rentalContractPDF = req.files?.rentalContractPDF?.[0]?.path;
       const property = await propertyService.create(data);
@@ -35,9 +34,11 @@ const propertyController = {
 
   async update(req, res) {
     try {
-      const data = propertySchema.partial().parse(req.body);
-      if (req.files?.cahierDeChargePDF) data.cahierDeChargePDF = req.files.cahierDeChargePDF[0].path;
-      if (req.files?.rentalContractPDF) data.rentalContractPDF = req.files.rentalContractPDF[0].path;
+      const data = req.body;
+      if (req.files?.cahierDeChargePDF)
+        data.cahierDeChargePDF = req.files.cahierDeChargePDF[0].path;
+      if (req.files?.rentalContractPDF)
+        data.rentalContractPDF = req.files.rentalContractPDF[0].path;
       const property = await propertyService.update(req.params.id, data);
       res.json(property);
     } catch (err) {
@@ -48,7 +49,7 @@ const propertyController = {
   async delete(req, res) {
     try {
       await propertyService.delete(req.params.id);
-      res.json({ message: 'Deleted' });
+      res.json({ message: "Deleted" });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

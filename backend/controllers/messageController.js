@@ -1,5 +1,4 @@
-const messageService = require('../services/messageService');
-const { messageSchema } = require('../validations/zodSchemas');
+const messageService = require("../services/messageService");
 
 const messageController = {
   async getAll(req, res) {
@@ -12,8 +11,10 @@ const messageController = {
 
   async send(req, res) {
     try {
-      const data = messageSchema.parse(req.body);
-      res.status(201).json(await messageService.send({ senderId: req.user.id, ...data }));
+      const data = req.body;
+      res
+        .status(201)
+        .json(await messageService.send({ senderId: req.user.id, ...data }));
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

@@ -1,10 +1,9 @@
-const invoiceService = require('../services/invoiceService');
-const { paymentSchema } = require('../validations/zodSchemas');
+const invoiceService = require("../services/invoiceService");
 
 const invoiceController = {
   async getAll(req, res) {
     try {
-      if (req.user.role === 'CITIZEN') {
+      if (req.user.role === "CITIZEN") {
         res.json(await invoiceService.getByCitizen(req.user.id));
       } else {
         res.json(await invoiceService.getAll());
@@ -16,7 +15,7 @@ const invoiceController = {
 
   async pay(req, res) {
     try {
-      const { invoiceId, amount } = paymentSchema.parse(req.body);
+      const { invoiceId, amount } = req.body;
       const result = await invoiceService.pay(invoiceId, amount);
       res.json(result);
     } catch (err) {

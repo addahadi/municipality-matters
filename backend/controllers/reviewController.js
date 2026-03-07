@@ -1,10 +1,9 @@
-const reviewService = require('../services/reviewService');
-const { reviewSchema } = require('../validations/zodSchemas');
+const reviewService = require("../services/reviewService");
 
 const reviewController = {
   async getAll(req, res) {
     try {
-      if (req.user.role === 'CITIZEN') {
+      if (req.user.role === "CITIZEN") {
         res.json(await reviewService.getByCitizen(req.user.id));
       } else {
         res.json(await reviewService.getAll());
@@ -16,8 +15,10 @@ const reviewController = {
 
   async create(req, res) {
     try {
-      const data = reviewSchema.parse(req.body);
-      res.status(201).json(await reviewService.create({ citizenId: req.user.id, ...data }));
+      const data = req.body;
+      res
+        .status(201)
+        .json(await reviewService.create({ citizenId: req.user.id, ...data }));
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

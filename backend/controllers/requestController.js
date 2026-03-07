@@ -1,10 +1,9 @@
-const requestService = require('../services/requestService');
-const { requestSchema } = require('../validations/zodSchemas');
+const requestService = require("../services/requestService");
 
 const requestController = {
   async getAll(req, res) {
     try {
-      if (req.user.role === 'CITIZEN') {
+      if (req.user.role === "CITIZEN") {
         res.json(await requestService.getByCitizen(req.user.id));
       } else {
         res.json(await requestService.getAll());
@@ -16,8 +15,10 @@ const requestController = {
 
   async create(req, res) {
     try {
-      const data = requestSchema.parse(req.body);
-      res.status(201).json(await requestService.create({ citizenId: req.user.id, ...data }));
+      const data = req.body;
+      res
+        .status(201)
+        .json(await requestService.create({ citizenId: req.user.id, ...data }));
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
