@@ -154,7 +154,13 @@
   },
   "accounts": {
     "role": "Role",
+    "create": "Create Account",
     "edit": "Edit Account",
+    "employee": "Employee",
+    "citizen": "Citizen",
+    "allRoles": "All Roles",
+    "created": "Account created successfully",
+    "createError": "Failed to create account",
     "updated": "Account updated successfully",
     "deleted": "Account deleted successfully",
     "confirmDelete": "Delete Account?",
