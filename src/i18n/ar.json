@@ -35,7 +35,17 @@
     "loginSubtitle": "سجّل دخولك للمتابعة",
     "registerSubtitle": "إنشاء حساب مواطن جديد",
     "noAccount": "ليس لديك حساب؟",
-    "hasAccount": "لديك حساب بالفعل؟"
+    "hasAccount": "لديك حساب بالفعل؟",
+    "sideTitle": "نظام إدارة الممتلكات البلدية",
+    "sideDescription": "منصتك الرقمية الحديثة لإدارة الممتلكات البلدية والخدمات وطلبات المواطنين بكفاءة.",
+    "sideFeature1": "وصول آمن",
+    "sideFeature2": "بوابة المواطن",
+    "sideFeature3": "التحليلات",
+    "registerSideTitle": "انضم إلى منصتنا",
+    "registerSideDescription": "أنشئ حساب مواطن وتمتع بالوصول إلى جميع الخدمات البلدية من مكان واحد.",
+    "regFeature1": "الوثائق",
+    "regFeature2": "الممتلكات",
+    "regFeature3": "الطلبات"
   },
   "property": {
     "title": "الممتلكات",

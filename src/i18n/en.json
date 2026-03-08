@@ -35,7 +35,17 @@
     "loginSubtitle": "Sign in to your account to continue",
     "registerSubtitle": "Create a new citizen account",
     "noAccount": "Don't have an account?",
-    "hasAccount": "Already have an account?"
+    "hasAccount": "Already have an account?",
+    "sideTitle": "Municipal Property Management",
+    "sideDescription": "Your modern digital platform for managing municipal properties, services, and citizen requests efficiently.",
+    "sideFeature1": "Secure Access",
+    "sideFeature2": "Citizen Portal",
+    "sideFeature3": "Analytics",
+    "registerSideTitle": "Join Our Platform",
+    "registerSideDescription": "Create your citizen account and access all municipal services from one place.",
+    "regFeature1": "Documents",
+    "regFeature2": "Properties",
+    "regFeature3": "Requests"
   },
   "property": {
     "title": "Properties",
