@@ -27,9 +27,15 @@
     "nationalId": "رقم الهوية",
     "role": "الدور",
     "loginSuccess": "تم تسجيل الدخول بنجاح",
-    "loginError": "بيانات غير صالحة",
+    "loginError": "اسم المستخدم أو كلمة المرور غير صحيحة",
     "logoutSuccess": "تم تسجيل الخروج بنجاح",
-    "registerSuccess": "تم إنشاء الحساب بنجاح"
+    "registerSuccess": "تم إنشاء الحساب بنجاح",
+    "registerError": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+    "welcomeBack": "مرحباً بعودتك",
+    "loginSubtitle": "سجّل دخولك للمتابعة",
+    "registerSubtitle": "إنشاء حساب مواطن جديد",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟"
   },
   "property": {
     "title": "الممتلكات",
@@ -49,7 +55,9 @@
     "closed": "مغلق",
     "created": "تم إنشاء الممتلك بنجاح",
     "updated": "تم تحديث الممتلك بنجاح",
-    "deleted": "تم حذف الممتلك بنجاح"
+    "deleted": "تم حذف الممتلك بنجاح",
+    "saveError": "فشل في حفظ الممتلك",
+    "deleteError": "فشل في حذف الممتلك"
   },
   "dashboard": {
     "welcome": "مرحباً بعودتك",
@@ -59,13 +67,110 @@
     "totalCitizens": "إجمالي المواطنين",
     "recentActivity": "النشاط الأخير"
   },
+  "auctions": {
+    "create": "إنشاء مزاد",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "startingPrice": "السعر الابتدائي",
+    "finalPrice": "السعر النهائي",
+    "close": "إغلاق المزاد",
+    "created": "تم إنشاء المزاد بنجاح",
+    "closed": "تم إغلاق المزاد بنجاح",
+    "createError": "فشل في إنشاء المزاد",
+    "closeError": "فشل في إغلاق المزاد"
+  },
+  "invoices": {
+    "citizen": "المواطن",
+    "total": "المبلغ الإجمالي",
+    "amountPaid": "المبلغ المدفوع",
+    "remaining": "المتبقي",
+    "payEdahabia": "الدفع عبر الذهبية",
+    "edahabiaSimulation": "بوابة دفع الذهبية المحاكاة",
+    "paymentAmount": "مبلغ الدفع",
+    "confirmPayment": "تأكيد الدفع",
+    "paymentSuccess": "تمت معالجة الدفع بنجاح",
+    "paymentError": "فشل الدفع. يرجى المحاولة مرة أخرى."
+  },
+  "requests": {
+    "type": "نوع الطلب",
+    "description": "الوصف",
+    "citizen": "المواطن",
+    "submit": "تقديم طلب",
+    "approve": "موافقة",
+    "reject": "رفض",
+    "submitted": "تم تقديم الطلب بنجاح",
+    "approved": "تمت الموافقة على الطلب",
+    "rejected": "تم رفض الطلب",
+    "submitError": "فشل في تقديم الطلب",
+    "actionError": "فشل في معالجة الطلب"
+  },
+  "complaints": {
+    "description": "الوصف",
+    "citizen": "المواطن",
+    "submit": "تقديم شكوى",
+    "resolve": "حل",
+    "submitted": "تم تقديم الشكوى بنجاح",
+    "resolved": "تم حل الشكوى",
+    "submitError": "فشل في تقديم الشكوى",
+    "resolveError": "فشل في حل الشكوى"
+  },
+  "reviews": {
+    "content": "محتوى المراجعة",
+    "citizen": "المواطن",
+    "submit": "تقديم مراجعة",
+    "hide": "إخفاء",
+    "submitted": "تم تقديم المراجعة بنجاح",
+    "hidden": "تم إخفاء المراجعة",
+    "submitError": "فشل في تقديم المراجعة",
+    "hideError": "فشل في إخفاء المراجعة"
+  },
+  "announcements": {
+    "create": "إنشاء إعلان",
+    "edit": "تعديل إعلان",
+    "titleField": "العنوان",
+    "content": "المحتوى",
+    "language": "اللغة",
+    "created": "تم إنشاء الإعلان بنجاح",
+    "updated": "تم تحديث الإعلان بنجاح",
+    "createError": "فشل في إنشاء الإعلان"
+  },
+  "messages": {
+    "compose": "رسالة جديدة",
+    "to": "إلى",
+    "content": "الرسالة",
+    "send": "إرسال",
+    "sent": "تم إرسال الرسالة بنجاح",
+    "sendError": "فشل في إرسال الرسالة"
+  },
+  "accounts": {
+    "role": "الدور",
+    "edit": "تعديل الحساب",
+    "updated": "تم تحديث الحساب بنجاح",
+    "deleted": "تم حذف الحساب بنجاح",
+    "confirmDelete": "حذف الحساب؟",
+    "deleteWarning": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف المستخدم وجميع بياناته نهائياً.",
+    "updateError": "فشل في تحديث الحساب",
+    "deleteError": "فشل في حذف الحساب"
+  },
+  "statistics": {
+    "totalProperties": "إجمالي الممتلكات",
+    "totalUsers": "إجمالي المستخدمين",
+    "totalInvoices": "إجمالي الفواتير",
+    "totalAuctions": "إجمالي المزادات",
+    "propertyByStatus": "الممتلكات حسب الحالة",
+    "monthlyRevenue": "الإيرادات الشهرية"
+  },
+  "documents": {
+    "file": "اسم الملف",
+    "download": "تحميل"
+  },
   "common": {
     "save": "حفظ",
     "cancel": "إلغاء",
     "delete": "حذف",
     "edit": "تعديل",
     "view": "عرض",
-    "search": "بحث",
+    "search": "بحث...",
     "filter": "تصفية",
     "noData": "لا توجد بيانات",
     "loading": "جاري التحميل...",
@@ -84,6 +189,23 @@
     "pending": "قيد الانتظار",
     "approved": "موافق عليه",
     "rejected": "مرفوض",
-    "resolved": "تم الحل"
+    "resolved": "تم الحل",
+    "success": "نجاح",
+    "error": "خطأ",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "actions": "الإجراءات"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "usernameMin": "اسم المستخدم يجب أن يكون 3 أحرف على الأقل",
+    "usernameMax": "اسم المستخدم يجب أن لا يتجاوز 50 حرفاً",
+    "passwordMin": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+    "passwordMax": "كلمة المرور يجب أن لا تتجاوز 100 حرف",
+    "nationalIdMin": "رقم الهوية يجب أن يكون 5 أحرف على الأقل",
+    "nationalIdMax": "رقم الهوية يجب أن لا يتجاوز 20 حرفاً",
+    "positiveNumber": "يرجى إدخال رقم صحيح موجب",
+    "descriptionMin": "يجب أن يكون 10 أحرف على الأقل",
+    "tooLong": "المدخل طويل جداً"
   }
 }

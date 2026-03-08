@@ -19,13 +19,13 @@ const AdminDashboard = () => {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{t('dashboard.welcome')}, {user?.username}</h1>
-          <p className="text-muted-foreground">{t('app.subtitle')}</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('dashboard.welcome')}, {user?.username || 'Admin'}</h1>
+          <p className="text-muted-foreground mt-1">{t('app.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat) => (
-            <Card key={stat.label}>
+            <Card key={stat.label} className="hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">{stat.label}</CardTitle>
                 <stat.icon className={`h-5 w-5 ${stat.color}`} />
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
             <CardTitle>{t('dashboard.recentActivity')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">{t('common.noData')}</p>
+            <p className="text-muted-foreground py-4 text-center">{t('common.noData')}</p>
           </CardContent>
         </Card>
       </div>

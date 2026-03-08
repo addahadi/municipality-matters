@@ -24,9 +24,9 @@ const ComplaintsPage = () => {
   const handleResolve = async (id: string) => {
     try {
       await complaintsApi.resolve(id);
-      toast({ title: t('common.success'), description: t('complaints.resolved') });
+      toast({ title: t('complaints.resolved'), variant: 'success' as any });
       fetchData();
-    } catch { toast({ title: t('common.error'), variant: 'destructive' }); }
+    } catch { toast({ title: t('complaints.resolveError'), variant: 'destructive' }); }
   };
 
   return (
@@ -35,38 +35,40 @@ const ComplaintsPage = () => {
         <h1 className="text-2xl font-bold text-foreground">{t('nav.complaints')}</h1>
         <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('complaints.description')}</TableHead>
-                  <TableHead>{t('complaints.citizen')}</TableHead>
-                  <TableHead>{t('common.status')}</TableHead>
-                  <TableHead>{t('common.date')}</TableHead>
-                  <TableHead>{t('common.actions')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground">{t('common.loading')}</TableCell></TableRow>
-                ) : complaints.length === 0 ? (
-                  <TableRow><TableCell colSpan={5} className="text-center py-8 text-muted-foreground">{t('common.noData')}</TableCell></TableRow>
-                ) : complaints.map((c: any) => (
-                  <TableRow key={c.id}>
-                    <TableCell className="max-w-[300px] truncate">{c.description}</TableCell>
-                    <TableCell>{c.citizenName || c.citizenId}</TableCell>
-                    <TableCell><Badge variant={c.status === 'RESOLVED' ? 'default' : 'secondary'}>{c.status}</Badge></TableCell>
-                    <TableCell>{new Date(c.date).toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      {c.status === 'PENDING' && (
-                        <Button size="sm" onClick={() => handleResolve(c.id)}>
-                          <CheckCircle className="h-4 w-4 mr-1" />{t('complaints.resolve')}
-                        </Button>
-                      )}
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t('complaints.description')}</TableHead>
+                    <TableHead>{t('complaints.citizen')}</TableHead>
+                    <TableHead>{t('common.status')}</TableHead>
+                    <TableHead>{t('common.date')}</TableHead>
+                    <TableHead>{t('common.actions')}</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">{t('common.loading')}</TableCell></TableRow>
+                  ) : complaints.length === 0 ? (
+                    <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">{t('common.noData')}</TableCell></TableRow>
+                  ) : complaints.map((c: any) => (
+                    <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
+                      <TableCell className="max-w-[300px] truncate">{c.description}</TableCell>
+                      <TableCell>{c.citizenName || c.citizenId}</TableCell>
+                      <TableCell><Badge variant={c.status === 'RESOLVED' ? 'default' : 'secondary'}>{c.status}</Badge></TableCell>
+                      <TableCell>{new Date(c.date).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {c.status === 'PENDING' && (
+                          <Button size="sm" className="gap-1" onClick={() => handleResolve(c.id)}>
+                            <CheckCircle className="h-4 w-4" />{t('complaints.resolve')}
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>

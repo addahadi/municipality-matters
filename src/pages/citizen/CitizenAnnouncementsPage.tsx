@@ -20,17 +20,17 @@ const CitizenAnnouncementsPage = () => {
       <div className="space-y-6">
         <h1 className="text-2xl font-bold text-foreground">{t('nav.announcements')}</h1>
         {loading ? (
-          <Card><CardContent className="py-8 text-center text-muted-foreground">{t('common.loading')}</CardContent></Card>
+          <Card><CardContent className="py-12 text-center text-muted-foreground">{t('common.loading')}</CardContent></Card>
         ) : announcements.length === 0 ? (
-          <Card><CardContent className="py-8 text-center text-muted-foreground">{t('common.noData')}</CardContent></Card>
+          <Card><CardContent className="py-12 text-center text-muted-foreground">{t('common.noData')}</CardContent></Card>
         ) : (
           <div className="space-y-4">
             {announcements.map((a: any) => (
-              <Card key={a.id}>
+              <Card key={a.id} className="hover:shadow-md transition-shadow">
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                      <Megaphone className="h-5 w-5 text-primary" />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Megaphone className="h-5 w-5 text-primary shrink-0" />
                       {a.title}
                     </CardTitle>
                     <div className="flex items-center gap-2">
@@ -39,7 +39,7 @@ const CitizenAnnouncementsPage = () => {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent><p className="text-foreground">{a.content}</p></CardContent>
+                <CardContent><p className="text-foreground leading-relaxed">{a.content}</p></CardContent>
               </Card>
             ))}
           </div>
