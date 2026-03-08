@@ -1,18 +1,25 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, FileText, ClipboardList, Megaphone } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { statisticsApi } from '@/services/api';
 
 const CitizenDashboard = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    statisticsApi.getCitizenStats().then(r => setData(r.data)).catch(() => {});
+  }, []);
 
   const stats = [
-    { label: t('nav.properties'), value: '—', icon: Building2, color: 'text-primary' },
-    { label: t('nav.invoices'), value: '—', icon: FileText, color: 'text-warning' },
-    { label: t('nav.requests'), value: '—', icon: ClipboardList, color: 'text-info' },
-    { label: t('nav.announcements'), value: '—', icon: Megaphone, color: 'text-accent' },
+    { label: t('nav.properties'), value: data?.totalProperties ?? '—', icon: Building2, color: 'text-primary' },
+    { label: t('nav.invoices'), value: data?.totalInvoices ?? '—', icon: FileText, color: 'text-warning' },
+    { label: t('nav.requests'), value: data?.totalRequests ?? '—', icon: ClipboardList, color: 'text-info' },
+    { label: t('nav.announcements'), value: data?.totalAnnouncements ?? '—', icon: Megaphone, color: 'text-accent' },
   ];
 
   return (

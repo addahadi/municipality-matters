@@ -1,18 +1,25 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, Users, Gavel, ClipboardList } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { statisticsApi } from '@/services/api';
 
 const AdminDashboard = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    statisticsApi.getAdminStats().then(r => setData(r.data)).catch(() => {});
+  }, []);
 
   const stats = [
-    { label: t('dashboard.totalProperties'), value: '—', icon: Building2, color: 'text-primary' },
-    { label: t('dashboard.totalCitizens'), value: '—', icon: Users, color: 'text-accent' },
-    { label: t('dashboard.activeAuctions'), value: '—', icon: Gavel, color: 'text-warning' },
-    { label: t('dashboard.pendingRequests'), value: '—', icon: ClipboardList, color: 'text-info' },
+    { label: t('dashboard.totalProperties'), value: data?.totalProperties ?? '—', icon: Building2, color: 'text-primary' },
+    { label: t('dashboard.totalCitizens'), value: data?.totalCitizens ?? '—', icon: Users, color: 'text-accent' },
+    { label: t('dashboard.activeAuctions'), value: data?.activeAuctions ?? '—', icon: Gavel, color: 'text-warning' },
+    { label: t('dashboard.pendingRequests'), value: data?.pendingRequests ?? '—', icon: ClipboardList, color: 'text-info' },
   ];
 
   return (
