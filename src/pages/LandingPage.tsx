@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,15 +7,87 @@ import {
   Building2, Gavel, FileText, Shield, Users, Globe,
   ClipboardList, Megaphone, ArrowRight, CheckCircle2,
 } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
     document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero stagger
+      gsap.from("[data-hero] > *", {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out",
+      });
+
+      // Stats counter feel
+      gsap.from("[data-stat]", {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: { trigger: "[data-stats]", start: "top 85%" },
+      });
+
+      // Feature cards
+      gsap.from("[data-feature]", {
+        y: 50,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: { trigger: "[data-features]", start: "top 80%" },
+      });
+
+      // Section headings
+      gsap.utils.toArray<HTMLElement>("[data-heading]").forEach((el) => {
+        gsap.from(el, {
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 85%" },
+        });
+      });
+
+      // Role cards
+      gsap.from("[data-role]", {
+        y: 50,
+        opacity: 0,
+        scale: 0.96,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: { trigger: "[data-roles]", start: "top 80%" },
+      });
+
+      // CTA
+      gsap.from("[data-cta] > *", {
+        y: 30,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: { trigger: "[data-cta]", start: "top 85%" },
+      });
+    }, mainRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const features = [
     { icon: Building2, title: t("landing.featureProperties"), desc: t("landing.featurePropertiesDesc") },
@@ -33,7 +106,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div ref={mainRef} className="min-h-screen bg-background text-foreground">
       {/* Navbar */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -62,7 +135,7 @@ const LandingPage = () => {
       <section className="relative overflow-hidden py-20 sm:py-32">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.08),transparent_60%)]" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mx-auto max-w-3xl">
+          <div data-hero className="mx-auto max-w-3xl">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary mb-6">
               <Shield className="h-3.5 w-3.5" />
               {t("landing.badge")}
@@ -89,11 +162,11 @@ const LandingPage = () => {
       </section>
 
       {/* Stats */}
-      <section className="border-y border-border bg-muted/40 py-12">
+      <section data-stats className="border-y border-border bg-muted/40 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
+              <div key={stat.label} data-stat className="text-center">
                 <p className="text-3xl font-bold text-primary">{stat.value}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
               </div>
@@ -103,15 +176,15 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-20 sm:py-28">
+      <section data-features className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div data-heading className="text-center mb-16">
             <h2 className="text-3xl font-bold sm:text-4xl">{t("landing.featuresTitle")}</h2>
             <p className="mt-4 text-muted-foreground text-lg">{t("landing.featuresSubtitle")}</p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
-              <Card key={f.title} className="group border-border/60 bg-card transition-all duration-200 hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5">
+              <Card key={f.title} data-feature className="group border-border/60 bg-card transition-all duration-200 hover:shadow-lg hover:border-primary/20 hover:-translate-y-0.5">
                 <CardContent className="p-6">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <f.icon className="h-5 w-5" />
@@ -126,9 +199,9 @@ const LandingPage = () => {
       </section>
 
       {/* Roles */}
-      <section className="border-t border-border bg-muted/30 py-20 sm:py-28">
+      <section data-roles className="border-t border-border bg-muted/30 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div data-heading className="text-center mb-16">
             <h2 className="text-3xl font-bold sm:text-4xl">{t("landing.rolesTitle")}</h2>
             <p className="mt-4 text-muted-foreground text-lg">{t("landing.rolesSubtitle")}</p>
           </div>
@@ -138,7 +211,7 @@ const LandingPage = () => {
               { icon: Users, role: t("landing.roleEmployee"), items: t("landing.roleEmployeeItems", { returnObjects: true }) as string[] },
               { icon: Building2, role: t("landing.roleCitizen"), items: t("landing.roleCitizenItems", { returnObjects: true }) as string[] },
             ].map((r) => (
-              <Card key={r.role} className="border-border/60">
+              <Card key={r.role} data-role className="border-border/60">
                 <CardContent className="p-6">
                   <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <r.icon className="h-5 w-5" />
@@ -161,7 +234,7 @@ const LandingPage = () => {
 
       {/* CTA */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+        <div data-cta className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("landing.ctaTitle")}</h2>
           <p className="mt-4 text-muted-foreground text-lg">{t("landing.ctaSubtitle")}</p>
           <Button size="lg" className="mt-8 text-base px-10" asChild>
