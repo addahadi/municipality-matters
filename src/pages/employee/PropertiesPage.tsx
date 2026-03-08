@@ -18,27 +18,20 @@ import { Plus, Pencil, Trash2, Search, Loader2 } from 'lucide-react';
 type PropertyStatus = 'AVAILABLE' | 'RENTED' | 'AUCTION' | 'CLOSED';
 
 interface Property {
-  id: string;
-  title: string;
-  location: string;
-  superficie: number;
-  status: PropertyStatus;
-  cahierPrice: number;
-  startingAuctionPrice: number;
-  createdAt: string;
+  id: string; title: string; location: string; superficie: number;
+  status: PropertyStatus; cahierPrice: number; startingAuctionPrice: number; createdAt: string;
 }
 
 const statusColors: Record<PropertyStatus, string> = {
-  AVAILABLE: 'bg-success text-success-foreground',
-  RENTED: 'bg-info text-info-foreground',
-  AUCTION: 'bg-warning text-warning-foreground',
-  CLOSED: 'bg-muted text-muted-foreground',
+  AVAILABLE: 'bg-success text-success-foreground', RENTED: 'bg-info text-info-foreground',
+  AUCTION: 'bg-warning text-warning-foreground', CLOSED: 'bg-muted text-muted-foreground',
 };
 
 const PropertiesPage = () => {
   const { t } = useTranslation();
   const [properties, setProperties] = useState<Property[]>([]);
   const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('ALL');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [saving, setSaving] = useState(false);
@@ -49,73 +42,44 @@ const PropertiesPage = () => {
   const { errors, validate, clearErrors, clearFieldError } = useFormValidation(propertySchema);
 
   const fetchProperties = async () => {
-    try {
-      const res = await propertiesApi.getAll();
-      setProperties(res.data);
-    } catch { /* API not connected */ }
+    try { const res = await propertiesApi.getAll(); setProperties(res.data); } catch { }
   };
 
   useEffect(() => { fetchProperties(); }, []);
 
-  const updateField = (field: string, value: string) => {
-    setForm(f => ({ ...f, [field]: value }));
-    clearFieldError(field);
-  };
+  const updateField = (field: string, value: string) => { setForm(f => ({ ...f, [field]: value })); clearFieldError(field); };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate(form)) return;
-
     setSaving(true);
     const formData = new FormData();
     Object.entries(form).forEach(([key, val]) => formData.append(key, String(val)));
     try {
-      if (editingProperty) {
-        await propertiesApi.update(editingProperty.id, formData);
-        toast({ title: t('property.updated'), variant: 'success' as any });
-      } else {
-        await propertiesApi.create(formData);
-        toast({ title: t('property.created'), variant: 'success' as any });
-      }
-      setDialogOpen(false);
-      setEditingProperty(null);
-      resetForm();
-      fetchProperties();
-    } catch {
-      toast({ title: t('property.saveError'), variant: 'destructive' });
-    } finally { setSaving(false); }
+      if (editingProperty) { await propertiesApi.update(editingProperty.id, formData); toast({ title: t('property.updated'), variant: 'success' as any }); }
+      else { await propertiesApi.create(formData); toast({ title: t('property.created'), variant: 'success' as any }); }
+      setDialogOpen(false); setEditingProperty(null); resetForm(); fetchProperties();
+    } catch { toast({ title: t('property.saveError'), variant: 'destructive' }); } finally { setSaving(false); }
   };
 
   const handleDelete = async (id: string) => {
-    try {
-      await propertiesApi.delete(id);
-      toast({ title: t('property.deleted'), variant: 'success' as any });
-      fetchProperties();
-    } catch {
-      toast({ title: t('property.deleteError'), variant: 'destructive' });
-    }
+    try { await propertiesApi.delete(id); toast({ title: t('property.deleted'), variant: 'success' as any }); fetchProperties(); }
+    catch { toast({ title: t('property.deleteError'), variant: 'destructive' }); }
   };
 
   const openEdit = (property: Property) => {
     setEditingProperty(property);
-    setForm({
-      title: property.title, location: property.location,
-      superficie: String(property.superficie), status: property.status,
-      cahierPrice: String(property.cahierPrice), startingAuctionPrice: String(property.startingAuctionPrice),
-    });
-    clearErrors();
-    setDialogOpen(true);
+    setForm({ title: property.title, location: property.location, superficie: String(property.superficie), status: property.status, cahierPrice: String(property.cahierPrice), startingAuctionPrice: String(property.startingAuctionPrice) });
+    clearErrors(); setDialogOpen(true);
   };
 
-  const resetForm = () => {
-    setForm({ title: '', location: '', superficie: '', status: 'AVAILABLE', cahierPrice: '', startingAuctionPrice: '' });
-    clearErrors();
-  };
+  const resetForm = () => { setForm({ title: '', location: '', superficie: '', status: 'AVAILABLE', cahierPrice: '', startingAuctionPrice: '' }); clearErrors(); };
 
-  const filtered = properties.filter(p =>
-    p.title?.toLowerCase().includes(search.toLowerCase()) ||
-    p.location?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = properties.filter(p => {
+    const matchSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.location?.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = filterStatus === 'ALL' || p.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
 
   return (
     <DashboardLayout>
@@ -123,24 +87,14 @@ const PropertiesPage = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h1 className="text-2xl font-bold text-foreground">{t('property.title')}</h1>
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) { setEditingProperty(null); resetForm(); } }}>
-            <DialogTrigger asChild>
-              <Button className="gap-2"><Plus className="h-4 w-4" />{t('property.add')}</Button>
-            </DialogTrigger>
+            <DialogTrigger asChild><Button className="gap-2"><Plus className="h-4 w-4" />{t('property.add')}</Button></DialogTrigger>
             <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>{editingProperty ? t('property.edit') : t('property.add')}</DialogTitle>
-              </DialogHeader>
+              <DialogHeader><DialogTitle>{editingProperty ? t('property.edit') : t('property.add')}</DialogTitle></DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormFieldWrapper label={t('property.name')} error={errors.title} required>
-                    <Input value={form.title} onChange={(e) => updateField('title', e.target.value)} className={errors.title ? 'border-destructive' : ''} />
-                  </FormFieldWrapper>
-                  <FormFieldWrapper label={t('property.location')} error={errors.location} required>
-                    <Input value={form.location} onChange={(e) => updateField('location', e.target.value)} className={errors.location ? 'border-destructive' : ''} />
-                  </FormFieldWrapper>
-                  <FormFieldWrapper label={t('property.superficie')} error={errors.superficie} required>
-                    <Input type="number" value={form.superficie} onChange={(e) => updateField('superficie', e.target.value)} className={errors.superficie ? 'border-destructive' : ''} />
-                  </FormFieldWrapper>
+                  <FormFieldWrapper label={t('property.name')} error={errors.title} required><Input value={form.title} onChange={(e) => updateField('title', e.target.value)} className={errors.title ? 'border-destructive' : ''} /></FormFieldWrapper>
+                  <FormFieldWrapper label={t('property.location')} error={errors.location} required><Input value={form.location} onChange={(e) => updateField('location', e.target.value)} className={errors.location ? 'border-destructive' : ''} /></FormFieldWrapper>
+                  <FormFieldWrapper label={t('property.superficie')} error={errors.superficie} required><Input type="number" value={form.superficie} onChange={(e) => updateField('superficie', e.target.value)} className={errors.superficie ? 'border-destructive' : ''} /></FormFieldWrapper>
                   <FormFieldWrapper label={t('property.status')}>
                     <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as PropertyStatus })}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
@@ -152,18 +106,12 @@ const PropertiesPage = () => {
                       </SelectContent>
                     </Select>
                   </FormFieldWrapper>
-                  <FormFieldWrapper label={t('property.cahierPrice')} error={errors.cahierPrice}>
-                    <Input type="number" value={form.cahierPrice} onChange={(e) => updateField('cahierPrice', e.target.value)} />
-                  </FormFieldWrapper>
-                  <FormFieldWrapper label={t('property.auctionPrice')} error={errors.startingAuctionPrice}>
-                    <Input type="number" value={form.startingAuctionPrice} onChange={(e) => updateField('startingAuctionPrice', e.target.value)} />
-                  </FormFieldWrapper>
+                  <FormFieldWrapper label={t('property.cahierPrice')} error={errors.cahierPrice}><Input type="number" value={form.cahierPrice} onChange={(e) => updateField('cahierPrice', e.target.value)} /></FormFieldWrapper>
+                  <FormFieldWrapper label={t('property.auctionPrice')} error={errors.startingAuctionPrice}><Input type="number" value={form.startingAuctionPrice} onChange={(e) => updateField('startingAuctionPrice', e.target.value)} /></FormFieldWrapper>
                 </div>
                 <div className="flex gap-2 justify-end pt-2">
                   <Button variant="outline" type="button" onClick={() => setDialogOpen(false)}>{t('common.cancel')}</Button>
-                  <Button type="submit" disabled={saving}>
-                    {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.save')}
-                  </Button>
+                  <Button type="submit" disabled={saving}>{saving ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.save')}</Button>
                 </div>
               </form>
             </DialogContent>
@@ -172,9 +120,21 @@ const PropertiesPage = () => {
 
         <Card>
           <CardHeader className="pb-4">
-            <div className="relative max-w-sm">
-              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder={t('common.search')} value={search} onChange={(e) => setSearch(e.target.value)} className="ps-9" />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder={t('common.search')} value={search} onChange={(e) => setSearch(e.target.value)} className="ps-9" />
+              </div>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">{t('common.filter')}: {t('common.status')}</SelectItem>
+                  <SelectItem value="AVAILABLE">{t('property.available')}</SelectItem>
+                  <SelectItem value="RENTED">{t('property.rented')}</SelectItem>
+                  <SelectItem value="AUCTION">{t('property.auction')}</SelectItem>
+                  <SelectItem value="CLOSED">{t('property.closed')}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardHeader>
           <CardContent className="p-0">
@@ -192,26 +152,22 @@ const PropertiesPage = () => {
                 </TableHeader>
                 <TableBody>
                   {filtered.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center text-muted-foreground py-12">{t('common.noData')}</TableCell>
+                    <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-12">{t('common.noData')}</TableCell></TableRow>
+                  ) : filtered.map((p) => (
+                    <TableRow key={p.id} className="hover:bg-muted/50 transition-colors">
+                      <TableCell className="font-medium">{p.title}</TableCell>
+                      <TableCell>{p.location}</TableCell>
+                      <TableCell>{p.superficie} m²</TableCell>
+                      <TableCell><Badge className={statusColors[p.status]}>{t(`property.${p.status.toLowerCase()}`)}</Badge></TableCell>
+                      <TableCell>{p.cahierPrice} DA</TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
+                          <Button variant="ghost" size="icon" onClick={() => openEdit(p)} className="hover:bg-primary/10 hover:text-primary"><Pencil className="h-4 w-4" /></Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)} className="hover:bg-destructive/10 text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
-                  ) : (
-                    filtered.map((p) => (
-                      <TableRow key={p.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="font-medium">{p.title}</TableCell>
-                        <TableCell>{p.location}</TableCell>
-                        <TableCell>{p.superficie} m²</TableCell>
-                        <TableCell><Badge className={statusColors[p.status]}>{t(`property.${p.status.toLowerCase()}`)}</Badge></TableCell>
-                        <TableCell>{p.cahierPrice} DA</TableCell>
-                        <TableCell>
-                          <div className="flex gap-1">
-                            <Button variant="ghost" size="icon" onClick={() => openEdit(p)} className="hover:bg-primary/10 hover:text-primary"><Pencil className="h-4 w-4" /></Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)} className="hover:bg-destructive/10 text-destructive"><Trash2 className="h-4 w-4" /></Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
+                  ))}
                 </TableBody>
               </Table>
             </div>

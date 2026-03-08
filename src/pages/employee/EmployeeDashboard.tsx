@@ -1,18 +1,25 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, Gavel, ClipboardList, AlertCircle } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { statisticsApi } from '@/services/api';
 
 const EmployeeDashboard = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    statisticsApi.getEmployeeStats().then(r => setData(r.data)).catch(() => {});
+  }, []);
 
   const stats = [
-    { label: t('dashboard.totalProperties'), value: '—', icon: Building2, color: 'text-primary' },
-    { label: t('dashboard.activeAuctions'), value: '—', icon: Gavel, color: 'text-warning' },
-    { label: t('dashboard.pendingRequests'), value: '—', icon: ClipboardList, color: 'text-info' },
-    { label: t('nav.complaints'), value: '—', icon: AlertCircle, color: 'text-destructive' },
+    { label: t('dashboard.totalProperties'), value: data?.totalProperties ?? '—', icon: Building2, color: 'text-primary' },
+    { label: t('dashboard.activeAuctions'), value: data?.activeAuctions ?? '—', icon: Gavel, color: 'text-warning' },
+    { label: t('dashboard.pendingRequests'), value: data?.pendingRequests ?? '—', icon: ClipboardList, color: 'text-info' },
+    { label: t('nav.complaints'), value: data?.pendingComplaints ?? '—', icon: AlertCircle, color: 'text-destructive' },
   ];
 
   return (

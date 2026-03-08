@@ -3,37 +3,54 @@ import { useTranslation } from 'react-i18next';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 import { reviewsApi } from '@/services/api';
-import { EyeOff } from 'lucide-react';
+import { EyeOff, Search } from 'lucide-react';
 
 const ReviewsPage = () => {
   const { t } = useTranslation();
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('ALL');
 
-  const fetchData = () => {
-    setLoading(true);
-    reviewsApi.getAll().then(r => setReviews(r.data)).catch(() => {}).finally(() => setLoading(false));
-  };
-
+  const fetchData = () => { setLoading(true); reviewsApi.getAll().then(r => setReviews(r.data)).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => { fetchData(); }, []);
 
   const handleHide = async (id: string) => {
-    try {
-      await reviewsApi.hide(id);
-      toast({ title: t('reviews.hidden'), variant: 'success' as any });
-      fetchData();
-    } catch { toast({ title: t('reviews.hideError'), variant: 'destructive' }); }
+    try { await reviewsApi.hide(id); toast({ title: t('reviews.hidden'), variant: 'success' as any }); fetchData(); }
+    catch { toast({ title: t('reviews.hideError'), variant: 'destructive' }); }
   };
+
+  const filtered = reviews.filter(r => {
+    const matchSearch = !search || r.content?.toLowerCase().includes(search.toLowerCase()) || (r.citizenName || '').toLowerCase().includes(search.toLowerCase());
+    const matchStatus = filterStatus === 'ALL' || r.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <h1 className="text-2xl font-bold text-foreground">{t('nav.reviews')}</h1>
         <Card>
+          <div className="p-4 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input placeholder={t('common.search')} value={search} onChange={e => setSearch(e.target.value)} className="ps-9" />
+            </div>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">{t('common.filter')}: {t('common.status')}</SelectItem>
+                <SelectItem value="VISIBLE">VISIBLE</SelectItem>
+                <SelectItem value="HIDDEN">HIDDEN</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
@@ -49,9 +66,9 @@ const ReviewsPage = () => {
                 <TableBody>
                   {loading ? (
                     <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">{t('common.loading')}</TableCell></TableRow>
-                  ) : reviews.length === 0 ? (
+                  ) : filtered.length === 0 ? (
                     <TableRow><TableCell colSpan={5} className="text-center py-12 text-muted-foreground">{t('common.noData')}</TableCell></TableRow>
-                  ) : reviews.map((r: any) => (
+                  ) : filtered.map((r: any) => (
                     <TableRow key={r.id} className="hover:bg-muted/50 transition-colors">
                       <TableCell className="max-w-[300px] truncate">{r.content}</TableCell>
                       <TableCell>{r.citizenName || r.citizenId}</TableCell>

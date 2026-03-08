@@ -4,49 +4,55 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { propertiesApi } from '@/services/api';
 import { Search, MapPin, Maximize2 } from 'lucide-react';
 
 type PropertyStatus = 'AVAILABLE' | 'RENTED' | 'AUCTION' | 'CLOSED';
 
 interface Property {
-  id: string;
-  title: string;
-  location: string;
-  superficie: number;
-  status: PropertyStatus;
-  cahierPrice: number;
-  startingAuctionPrice: number;
+  id: string; title: string; location: string; superficie: number;
+  status: PropertyStatus; cahierPrice: number; startingAuctionPrice: number;
 }
 
 const statusColors: Record<PropertyStatus, string> = {
-  AVAILABLE: 'bg-success text-success-foreground',
-  RENTED: 'bg-info text-info-foreground',
-  AUCTION: 'bg-warning text-warning-foreground',
-  CLOSED: 'bg-muted text-muted-foreground',
+  AVAILABLE: 'bg-success text-success-foreground', RENTED: 'bg-info text-info-foreground',
+  AUCTION: 'bg-warning text-warning-foreground', CLOSED: 'bg-muted text-muted-foreground',
 };
 
 const CitizenPropertiesPage = () => {
   const { t } = useTranslation();
   const [properties, setProperties] = useState<Property[]>([]);
   const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('ALL');
 
-  useEffect(() => {
-    propertiesApi.getAll().then(res => setProperties(res.data)).catch(() => {});
-  }, []);
+  useEffect(() => { propertiesApi.getAll().then(res => setProperties(res.data)).catch(() => {}); }, []);
 
-  const filtered = properties.filter(p =>
-    p.title?.toLowerCase().includes(search.toLowerCase()) ||
-    p.location?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = properties.filter(p => {
+    const matchSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.location?.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = filterStatus === 'ALL' || p.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <h1 className="text-2xl font-bold text-foreground">{t('nav.properties')}</h1>
-        <div className="relative max-w-sm">
-          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder={t('common.search')} value={search} onChange={(e) => setSearch(e.target.value)} className="ps-9" />
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input placeholder={t('common.search')} value={search} onChange={(e) => setSearch(e.target.value)} className="ps-9" />
+          </div>
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t('common.filter')}: {t('common.status')}</SelectItem>
+              <SelectItem value="AVAILABLE">{t('property.available')}</SelectItem>
+              <SelectItem value="RENTED">{t('property.rented')}</SelectItem>
+              <SelectItem value="AUCTION">{t('property.auction')}</SelectItem>
+              <SelectItem value="CLOSED">{t('property.closed')}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         {filtered.length === 0 ? (
           <p className="text-muted-foreground text-center py-12">{t('common.noData')}</p>
@@ -61,12 +67,8 @@ const CitizenPropertiesPage = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-2.5 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4 shrink-0" /><span>{p.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Maximize2 className="h-4 w-4 shrink-0" /><span>{p.superficie} m²</span>
-                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4 shrink-0" /><span>{p.location}</span></div>
+                  <div className="flex items-center gap-2 text-muted-foreground"><Maximize2 className="h-4 w-4 shrink-0" /><span>{p.superficie} m²</span></div>
                   <p className="text-foreground font-bold text-base pt-1">{p.cahierPrice} DA</p>
                 </CardContent>
               </Card>
