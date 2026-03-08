@@ -60,6 +60,13 @@ export const accountEditSchema = z.object({
   role: z.enum(['ADMIN', 'EMPLOYEE', 'CITIZEN']),
 });
 
+export const accountCreateSchema = z.object({
+  username: z.string().trim().min(3, 'validation.usernameMin').max(50, 'validation.usernameMax'),
+  nationalId: z.string().trim().min(5, 'validation.nationalIdMin').max(20, 'validation.nationalIdMax'),
+  password: z.string().min(6, 'validation.passwordMin').max(100, 'validation.passwordMax'),
+  role: z.enum(['EMPLOYEE', 'CITIZEN']),
+});
+
 export type LoginForm = z.infer<typeof loginSchema>;
 export type RegisterForm = z.infer<typeof registerSchema>;
 export type PropertyForm = z.infer<typeof propertySchema>;
@@ -71,3 +78,4 @@ export type AnnouncementForm = z.infer<typeof announcementSchema>;
 export type MessageForm = z.infer<typeof messageSchema>;
 export type PaymentForm = z.infer<typeof paymentSchema>;
 export type AccountEditForm = z.infer<typeof accountEditSchema>;
+export type AccountCreateForm = z.infer<typeof accountCreateSchema>;

@@ -13,7 +13,6 @@ const authController = {
 
   async register(req, res) {
     try {
-      console.log("nigga are you good?");
       const user = await authService.register(req.body);
       res.status(201).json(user);
     } catch (err) {

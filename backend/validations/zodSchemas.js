@@ -61,8 +61,15 @@ const messageSchema = z.object({
   content: z.string().min(1).max(5000),
 });
 
+const adminCreateUserSchema = z.object({
+  username: z.string().min(1).max(100),
+  nationalId: z.string().min(1).max(50),
+  password: z.string().min(6).max(255),
+  role: z.enum(['EMPLOYEE', 'CITIZEN']),
+});
+
 module.exports = {
   loginSchema, registerSchema, propertySchema, auctionSchema,
   bidSchema, paymentSchema, requestSchema, complaintSchema,
-  reviewSchema, announcementSchema, messageSchema,
+  reviewSchema, announcementSchema, messageSchema, adminCreateUserSchema,
 };

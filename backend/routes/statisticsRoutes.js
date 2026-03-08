@@ -4,6 +4,8 @@ const auth = require('../middlewares/authMiddleware');
 const role = require('../middlewares/roleMiddleware');
 const statisticsController = require('../controllers/statisticsController');
 
-router.get('/properties', auth, role('ADMIN'), statisticsController.getPropertyStats);
+router.get('/admin', auth, role('ADMIN'), statisticsController.getAdminStats);
+router.get('/employee', auth, role('EMPLOYEE', 'ADMIN'), statisticsController.getEmployeeStats);
+router.get('/citizen', auth, role('CITIZEN'), statisticsController.getCitizenStats);
 
 module.exports = router;

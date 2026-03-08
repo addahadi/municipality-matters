@@ -96,13 +96,17 @@ export const messagesApi = {
 export const usersApi = {
   getAll: () => api.get('/users'),
   getById: (id: string) => api.get(`/users/${id}`),
+  create: (data: { username: string; nationalId: string; password: string; role: string }) => api.post('/users', data),
   update: (id: string, data: any) => api.put(`/users/${id}`, data),
   delete: (id: string) => api.delete(`/users/${id}`),
 };
 
 // Statistics
 export const statisticsApi = {
-  getPropertyStats: () => api.get('/statistics/properties'),
+  getAdminStats: () => api.get('/statistics/admin'),
+  getEmployeeStats: () => api.get('/statistics/employee'),
+  getCitizenStats: () => api.get('/statistics/citizen'),
+  getPropertyStats: () => api.get('/statistics/admin'),
 };
 
 export default api;
