@@ -27,9 +27,15 @@
     "nationalId": "National ID",
     "role": "Role",
     "loginSuccess": "Logged in successfully",
-    "loginError": "Invalid credentials",
+    "loginError": "Invalid username or password",
     "logoutSuccess": "Logged out successfully",
-    "registerSuccess": "Account created successfully"
+    "registerSuccess": "Account created successfully",
+    "registerError": "Registration failed. Please try again.",
+    "welcomeBack": "Welcome back",
+    "loginSubtitle": "Sign in to your account to continue",
+    "registerSubtitle": "Create a new citizen account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
   },
   "property": {
     "title": "Properties",
@@ -49,7 +55,9 @@
     "closed": "Closed",
     "created": "Property created successfully",
     "updated": "Property updated successfully",
-    "deleted": "Property deleted successfully"
+    "deleted": "Property deleted successfully",
+    "saveError": "Failed to save property",
+    "deleteError": "Failed to delete property"
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -59,13 +67,110 @@
     "totalCitizens": "Total Citizens",
     "recentActivity": "Recent Activity"
   },
+  "auctions": {
+    "create": "Create Auction",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "startingPrice": "Starting Price",
+    "finalPrice": "Final Price",
+    "close": "Close Auction",
+    "created": "Auction created successfully",
+    "closed": "Auction closed successfully",
+    "createError": "Failed to create auction",
+    "closeError": "Failed to close auction"
+  },
+  "invoices": {
+    "citizen": "Citizen",
+    "total": "Total Amount",
+    "amountPaid": "Amount Paid",
+    "remaining": "Remaining",
+    "payEdahabia": "Pay via Edahabia",
+    "edahabiaSimulation": "Simulated Edahabia payment gateway",
+    "paymentAmount": "Payment Amount",
+    "confirmPayment": "Confirm Payment",
+    "paymentSuccess": "Payment processed successfully",
+    "paymentError": "Payment failed. Please try again."
+  },
+  "requests": {
+    "type": "Request Type",
+    "description": "Description",
+    "citizen": "Citizen",
+    "submit": "Submit Request",
+    "approve": "Approve",
+    "reject": "Reject",
+    "submitted": "Request submitted successfully",
+    "approved": "Request approved",
+    "rejected": "Request rejected",
+    "submitError": "Failed to submit request",
+    "actionError": "Failed to process request"
+  },
+  "complaints": {
+    "description": "Description",
+    "citizen": "Citizen",
+    "submit": "Submit Complaint",
+    "resolve": "Resolve",
+    "submitted": "Complaint submitted successfully",
+    "resolved": "Complaint resolved",
+    "submitError": "Failed to submit complaint",
+    "resolveError": "Failed to resolve complaint"
+  },
+  "reviews": {
+    "content": "Review Content",
+    "citizen": "Citizen",
+    "submit": "Submit Review",
+    "hide": "Hide",
+    "submitted": "Review submitted successfully",
+    "hidden": "Review hidden",
+    "submitError": "Failed to submit review",
+    "hideError": "Failed to hide review"
+  },
+  "announcements": {
+    "create": "Create Announcement",
+    "edit": "Edit Announcement",
+    "titleField": "Title",
+    "content": "Content",
+    "language": "Language",
+    "created": "Announcement created successfully",
+    "updated": "Announcement updated successfully",
+    "createError": "Failed to create announcement"
+  },
+  "messages": {
+    "compose": "New Message",
+    "to": "To",
+    "content": "Message",
+    "send": "Send",
+    "sent": "Message sent successfully",
+    "sendError": "Failed to send message"
+  },
+  "accounts": {
+    "role": "Role",
+    "edit": "Edit Account",
+    "updated": "Account updated successfully",
+    "deleted": "Account deleted successfully",
+    "confirmDelete": "Delete Account?",
+    "deleteWarning": "This action cannot be undone. The user and all their data will be permanently removed.",
+    "updateError": "Failed to update account",
+    "deleteError": "Failed to delete account"
+  },
+  "statistics": {
+    "totalProperties": "Total Properties",
+    "totalUsers": "Total Users",
+    "totalInvoices": "Total Invoices",
+    "totalAuctions": "Total Auctions",
+    "propertyByStatus": "Properties by Status",
+    "monthlyRevenue": "Monthly Revenue"
+  },
+  "documents": {
+    "file": "File Name",
+    "download": "Download"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
     "view": "View",
-    "search": "Search",
+    "search": "Search...",
     "filter": "Filter",
     "noData": "No data available",
     "loading": "Loading...",
@@ -84,6 +189,23 @@
     "pending": "Pending",
     "approved": "Approved",
     "rejected": "Rejected",
-    "resolved": "Resolved"
+    "resolved": "Resolved",
+    "success": "Success",
+    "error": "Error",
+    "create": "Create",
+    "update": "Update",
+    "actions": "Actions"
+  },
+  "validation": {
+    "required": "This field is required",
+    "usernameMin": "Username must be at least 3 characters",
+    "usernameMax": "Username must be at most 50 characters",
+    "passwordMin": "Password must be at least 6 characters",
+    "passwordMax": "Password must be at most 100 characters",
+    "nationalIdMin": "National ID must be at least 5 characters",
+    "nationalIdMax": "National ID must be at most 20 characters",
+    "positiveNumber": "Please enter a valid positive number",
+    "descriptionMin": "Must be at least 10 characters",
+    "tooLong": "Input is too long"
   }
 }
