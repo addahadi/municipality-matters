@@ -111,6 +111,7 @@ CREATE TABLE citizen_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   citizen_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   file_path VARCHAR(500) NOT NULL,
+  document_type VARCHAR(50) NOT NULL DEFAULT 'RESIDENCE_CERTIFICATE',
   created_at TIMESTAMP DEFAULT NOW()
 );
 

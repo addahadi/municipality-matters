@@ -22,16 +22,16 @@ router.post(
   "/",
   auth,
   role("EMPLOYEE", "ADMIN"),
-  validate(propertySchema),
   fields,
+  validate(propertySchema),
   propertyController.create,
 );
 router.put(
   "/:id",
   auth,
   role("EMPLOYEE", "ADMIN"),
-  validate(propertySchema, { partial: true }),
   fields,
+  validate(propertySchema, { partial: true }),
   propertyController.update,
 );
 router.delete(

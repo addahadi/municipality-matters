@@ -58,6 +58,7 @@
     "price": "Price",
     "auctionPrice": "Starting Auction Price",
     "cahierPrice": "Cahier Price",
+    "cahierPdf": "Cahier de Charge (PDF)",
     "actions": "Actions",
     "available": "Available",
     "rented": "Rented",
@@ -178,7 +179,12 @@
   },
   "documents": {
     "file": "File Name",
-    "download": "Download"
+    "download": "Download",
+    "add": "Add Document",
+    "type": "Document Type",
+    "selectType": "Select document type",
+    "uploadSuccess": "Document uploaded successfully",
+    "uploadError": "Failed to upload document"
   },
   "common": {
     "save": "Save",
@@ -210,7 +216,10 @@
     "error": "Error",
     "create": "Create",
     "update": "Update",
-    "actions": "Actions"
+    "actions": "Actions",
+    "upload": "Upload",
+    "selected": "Selected",
+    "selectFile": "Please select a file"
   },
   "validation": {
     "required": "This field is required",
@@ -251,11 +260,26 @@
     "rolesTitle": "Built for Every Role",
     "rolesSubtitle": "Each user type has a tailored experience with the right tools and permissions.",
     "roleAdmin": "Administrator",
-    "roleAdminItems": ["Manage all user accounts", "View system-wide statistics", "Oversee property portfolio", "Full platform control"],
+    "roleAdminItems": [
+      "Manage all user accounts",
+      "View system-wide statistics",
+      "Oversee property portfolio",
+      "Full platform control"
+    ],
     "roleEmployee": "Employee",
-    "roleEmployeeItems": ["Manage properties & auctions", "Handle citizen requests", "Process invoices & complaints", "Send announcements & messages"],
+    "roleEmployeeItems": [
+      "Manage properties & auctions",
+      "Handle citizen requests",
+      "Process invoices & complaints",
+      "Send announcements & messages"
+    ],
     "roleCitizen": "Citizen",
-    "roleCitizenItems": ["Browse available properties", "Submit requests & complaints", "Pay invoices online", "Download official documents"],
+    "roleCitizenItems": [
+      "Browse available properties",
+      "Submit requests & complaints",
+      "Pay invoices online",
+      "Download official documents"
+    ],
     "ctaTitle": "Ready to Get Started?",
     "ctaSubtitle": "Join thousands of citizens using our platform for seamless municipal services.",
     "ctaButton": "Create Your Account",
