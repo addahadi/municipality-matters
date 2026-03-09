@@ -32,6 +32,14 @@ const auctionController = {
     }
   },
 
+  async getBids(req, res) {
+    try {
+      res.json(await auctionService.getBids(req.params.id));
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
   async close(req, res) {
     try {
       res.json(await auctionService.close(req.params.id));

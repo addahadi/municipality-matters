@@ -3,6 +3,8 @@ const auctionRepository = require('../repositories/auctionRepository');
 const auctionService = {
   getAll: () => auctionRepository.findAll(),
 
+  getBids: (auctionId) => auctionRepository.getBids(auctionId),
+
   create: (data) => auctionRepository.create(data),
 
   async placeBid(auctionId, citizenId, amount) {
