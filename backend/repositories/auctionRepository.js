@@ -5,7 +5,9 @@ const auctionRepository = {
     const { rows } = await pool.query(
       `SELECT a.id, a.property_id AS "propertyId", p.title AS "propertyTitle",
        a.start_date AS "startDate", a.end_date AS "endDate", a.status,
-       a.starting_price AS "startingPrice", a.final_price AS "finalPrice", a.created_at AS "createdAt"
+       a.starting_price AS "startingPrice", a.final_price AS "finalPrice", 
+       COALESCE((SELECT MAX(amount) FROM bids WHERE auction_id = a.id), a.starting_price) AS "currentPrice",
+       a.created_at AS "createdAt"
        FROM auctions a JOIN properties p ON a.property_id = p.id ORDER BY a.created_at DESC`
     );
     return rows;
