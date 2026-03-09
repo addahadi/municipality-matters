@@ -111,6 +111,19 @@ const CitizenPropertiesPage = () => {
                   <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4 shrink-0" /><span>{p.location}</span></div>
                   <div className="flex items-center gap-2 text-muted-foreground"><Maximize2 className="h-4 w-4 shrink-0" /><span>{p.superficie} m²</span></div>
                   <p className="text-foreground font-bold text-base pt-1">{p.cahierPrice} DA</p>
+                  <div className="pt-2">
+                    {paidCahiers.has(p.id) ? (
+                      <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => viewCahier(p.id)}>
+                        <FileText className="h-4 w-4" />
+                        {t('property.viewCahier')}
+                      </Button>
+                    ) : (
+                      <Button variant="default" size="sm" className="w-full gap-2" onClick={() => openPurchaseDialog(p)}>
+                        <ShoppingCart className="h-4 w-4" />
+                        {t('property.purchaseCahier')}
+                      </Button>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
