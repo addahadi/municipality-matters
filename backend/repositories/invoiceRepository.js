@@ -24,11 +24,10 @@ const invoiceRepository = {
     return rows[0] || null;
   },
 
-  async create({ citizenId, propertyId, total, description }) {
+  async create({ citizenId, total }) {
     const { rows } = await pool.query(
-      `INSERT INTO invoices (citizen_id, property_id, total, remaining_amount, description) 
-       VALUES ($1, $2, $3, $3, $4) RETURNING *`,
-      [citizenId, propertyId, total, description]
+      `INSERT INTO invoices (citizen_id, total, remaining_amount) VALUES ($1,$2,$2) RETURNING *`,
+      [citizenId, total]
     );
     return rows[0];
   },

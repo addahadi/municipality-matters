@@ -68,7 +68,7 @@ export const auctionsApi = {
 // Invoices
 export const invoicesApi = {
   getAll: () => api.get("/invoices"),
-  create: (data: { propertyId?: string; total: number; description: string }) => api.post("/invoices", data),
+  create: (data: { total: number }) => api.post("/invoices", data),
   pay: (data: { invoiceId: string; amount: number }) =>
     api.post("/invoices/pay", data),
 };
