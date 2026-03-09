@@ -40,9 +40,7 @@ const CitizenPropertiesPage = () => {
     setPurchasing(true);
     try {
       await invoicesApi.create({
-        propertyId: property.id,
         total: property.cahierPrice,
-        description: `Cahier de Charge - ${property.title}`,
       });
       toast({ title: t('property.purchased'), variant: 'success' as any });
       setPaidCahiers(prev => new Set(prev).add(property.id));

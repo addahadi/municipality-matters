@@ -4,8 +4,8 @@ const invoiceService = {
   getAll: () => invoiceRepository.findAll(),
   getByCitizen: (citizenId) => invoiceRepository.findByCitizen(citizenId),
 
-  async create({ citizenId, propertyId, total, description }) {
-    return invoiceRepository.create({ citizenId, propertyId, total, description });
+  async create({ citizenId, total }) {
+    return invoiceRepository.create({ citizenId, total });
   },
 
   async pay(invoiceId, amount) {
