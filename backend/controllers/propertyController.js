@@ -54,6 +54,22 @@ const propertyController = {
       res.status(500).json({ error: err.message });
     }
   },
+
+  async getCahier(req, res) {
+    try {
+      const fs = require('fs');
+      const property = await propertyService.getById(req.params.id);
+      if (!property || !property.cahierDeChargePDF) {
+        return res.status(404).json({ error: "PDF not found" });
+      }
+      if (!fs.existsSync(property.cahierDeChargePDF)) {
+        return res.status(404).json({ error: "File not found" });
+      }
+      res.sendFile(require('path').resolve(property.cahierDeChargePDF));
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 };
 
 module.exports = propertyController;

@@ -13,6 +13,21 @@ const invoiceController = {
     }
   },
 
+  async create(req, res) {
+    try {
+      const { propertyId, total, description } = req.body;
+      const invoice = await invoiceService.create({
+        citizenId: req.user.id,
+        propertyId,
+        total,
+        description,
+      });
+      res.status(201).json(invoice);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+
   async pay(req, res) {
     try {
       const { invoiceId, amount } = req.body;

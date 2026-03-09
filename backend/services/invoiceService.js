@@ -4,6 +4,10 @@ const invoiceService = {
   getAll: () => invoiceRepository.findAll(),
   getByCitizen: (citizenId) => invoiceRepository.findByCitizen(citizenId),
 
+  async create({ citizenId, propertyId, total, description }) {
+    return invoiceRepository.create({ citizenId, propertyId, total, description });
+  },
+
   async pay(invoiceId, amount) {
     const invoice = await invoiceRepository.findById(invoiceId);
     if (!invoice) throw new Error('Invoice not found');

@@ -32,7 +32,7 @@ import { propertiesApi } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { propertySchema } from "@/lib/validations";
-import { Plus, Pencil, Trash2, Search, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Loader2, Eye, FileText } from "lucide-react";
 
 type PropertyStatus = "AVAILABLE" | "RENTED" | "AUCTION" | "CLOSED";
 
@@ -60,6 +60,8 @@ const PropertiesPage = () => {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [saving, setSaving] = useState(false);
   const [cahierFile, setCahierFile] = useState<File | null>(null);
@@ -133,6 +135,21 @@ const PropertiesPage = () => {
       fetchProperties();
     } catch {
       toast({ title: t("property.deleteError"), variant: "destructive" });
+    }
+  };
+
+  const openView = (property: Property) => {
+    setViewingProperty(property);
+    setDetailsDialogOpen(true);
+  };
+
+  const viewCahier = async (propertyId: string) => {
+    try {
+      const response = await propertiesApi.getCahier(propertyId);
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, '_blank');
+    } catch {
+      toast({ title: "PDF not available", variant: "destructive" });
     }
   };
 
@@ -400,8 +417,18 @@ const PropertiesPage = () => {
                             <Button
                               variant="ghost"
                               size="icon"
+                              onClick={() => openView(p)}
+                              className="hover:bg-blue-50 hover:text-blue-600"
+                              title={t("property.view")}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               onClick={() => openEdit(p)}
                               className="hover:bg-primary/10 hover:text-primary"
+                              title={t("property.edit")}
                             >
                               <Pencil className="h-4 w-4" />
                             </Button>
@@ -410,6 +437,7 @@ const PropertiesPage = () => {
                               size="icon"
                               onClick={() => handleDelete(p.id)}
                               className="hover:bg-destructive/10 text-destructive"
+                              title={t("common.delete")}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -423,6 +451,56 @@ const PropertiesPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Property Details Dialog */}
+        <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t("property.view")}</DialogTitle>
+            </DialogHeader>
+            {viewingProperty && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.name")}:</span>
+                    <p className="text-foreground">{viewingProperty.title}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.location")}:</span>
+                    <p className="text-foreground">{viewingProperty.location}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.superficie")}:</span>
+                    <p className="text-foreground">{viewingProperty.superficie} m²</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.status")}:</span>
+                    <Badge className={statusColors[viewingProperty.status]}>
+                      {t(`property.${viewingProperty.status.toLowerCase()}`)}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.cahierPrice")}:</span>
+                    <p className="text-foreground">{viewingProperty.cahierPrice} DA</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.auctionPrice")}:</span>
+                    <p className="text-foreground">{viewingProperty.startingAuctionPrice} DA</p>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <Button
+                    className="w-full gap-2"
+                    onClick={() => viewCahier(viewingProperty.id)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    {t("property.viewCahier")}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );

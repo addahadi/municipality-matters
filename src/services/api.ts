@@ -44,6 +44,7 @@ export const authApi = {
 export const propertiesApi = {
   getAll: () => api.get("/properties"),
   getById: (id: string) => api.get(`/properties/${id}`),
+  getCahier: (id: string) => api.get(`/properties/${id}/cahier`, { responseType: 'blob' }),
   create: (data: FormData) =>
     api.post("/properties", data, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -67,6 +68,7 @@ export const auctionsApi = {
 // Invoices
 export const invoicesApi = {
   getAll: () => api.get("/invoices"),
+  create: (data: { propertyId?: string; total: number; description: string }) => api.post("/invoices", data),
   pay: (data: { invoiceId: string; amount: number }) =>
     api.post("/invoices/pay", data),
 };

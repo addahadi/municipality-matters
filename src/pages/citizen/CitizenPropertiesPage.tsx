@@ -4,9 +4,13 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { propertiesApi } from '@/services/api';
-import { Search, MapPin, Maximize2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import FormFieldWrapper from '@/components/ui/form-field';
+import { propertiesApi, invoicesApi } from '@/services/api';
+import { toast } from '@/hooks/use-toast';
+import { Search, MapPin, Maximize2, FileText, ShoppingCart, Loader2 } from 'lucide-react';
 
 type PropertyStatus = 'AVAILABLE' | 'RENTED' | 'AUCTION' | 'CLOSED';
 
@@ -25,8 +29,45 @@ const CitizenPropertiesPage = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [paidCahiers, setPaidCahiers] = useState<Set<string>>(new Set());
+  const [purchasing, setPurchasing] = useState(false);
 
   useEffect(() => { propertiesApi.getAll().then(res => setProperties(res.data)).catch(() => {}); }, []);
+
+  const handlePurchaseCahier = async (property: Property) => {
+    setPurchasing(true);
+    try {
+      await invoicesApi.create({
+        propertyId: property.id,
+        total: property.cahierPrice,
+        description: `Cahier de Charge - ${property.title}`,
+      });
+      toast({ title: t('property.purchased'), variant: 'success' as any });
+      setPaidCahiers(prev => new Set(prev).add(property.id));
+      setPurchaseDialogOpen(false);
+    } catch {
+      toast({ title: t('property.purchaseError'), variant: 'destructive' });
+    } finally {
+      setPurchasing(false);
+    }
+  };
+
+  const viewCahier = async (propertyId: string) => {
+    try {
+      const response = await propertiesApi.getCahier(propertyId);
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, '_blank');
+    } catch {
+      toast({ title: "PDF not available", variant: "destructive" });
+    }
+  };
+
+  const openPurchaseDialog = (property: Property) => {
+    setSelectedProperty(property);
+    setPurchaseDialogOpen(true);
+  };
 
   const filtered = properties.filter(p => {
     const matchSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.location?.toLowerCase().includes(search.toLowerCase());
@@ -70,11 +111,62 @@ const CitizenPropertiesPage = () => {
                   <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="h-4 w-4 shrink-0" /><span>{p.location}</span></div>
                   <div className="flex items-center gap-2 text-muted-foreground"><Maximize2 className="h-4 w-4 shrink-0" /><span>{p.superficie} m²</span></div>
                   <p className="text-foreground font-bold text-base pt-1">{p.cahierPrice} DA</p>
+                  <div className="pt-2">
+                    {paidCahiers.has(p.id) ? (
+                      <Button variant="outline" size="sm" className="w-full gap-2" onClick={() => viewCahier(p.id)}>
+                        <FileText className="h-4 w-4" />
+                        {t('property.viewCahier')}
+                      </Button>
+                    ) : (
+                      <Button variant="default" size="sm" className="w-full gap-2" onClick={() => openPurchaseDialog(p)}>
+                        <ShoppingCart className="h-4 w-4" />
+                        {t('property.purchaseCahier')}
+                      </Button>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         )}
+        
+        {/* Purchase Dialog */}
+        <Dialog open={purchaseDialogOpen} onOpenChange={setPurchaseDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('property.purchaseDialog')}</DialogTitle>
+            </DialogHeader>
+            {selectedProperty && (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {t('property.purchaseDescription')}
+                </p>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.name')}:</span>
+                    <p className="text-foreground">{selectedProperty.title}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.location')}:</span>
+                    <p className="text-foreground">{selectedProperty.location}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.cahierPrice')}:</span>
+                    <p className="text-foreground font-bold">{selectedProperty.cahierPrice} DA</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 justify-end pt-2">
+                  <Button variant="outline" onClick={() => setPurchaseDialogOpen(false)}>
+                    {t('common.cancel')}
+                  </Button>
+                  <Button onClick={() => handlePurchaseCahier(selectedProperty)} disabled={purchasing}>
+                    {purchasing ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.purchase')}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );
