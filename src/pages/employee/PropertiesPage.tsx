@@ -451,6 +451,56 @@ const PropertiesPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Property Details Dialog */}
+        <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t("property.view")}</DialogTitle>
+            </DialogHeader>
+            {viewingProperty && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.name")}:</span>
+                    <p className="text-foreground">{viewingProperty.title}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.location")}:</span>
+                    <p className="text-foreground">{viewingProperty.location}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.superficie")}:</span>
+                    <p className="text-foreground">{viewingProperty.superficie} m²</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.status")}:</span>
+                    <Badge className={statusColors[viewingProperty.status]}>
+                      {t(`property.${viewingProperty.status.toLowerCase()}`)}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.cahierPrice")}:</span>
+                    <p className="text-foreground">{viewingProperty.cahierPrice} DA</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t("property.auctionPrice")}:</span>
+                    <p className="text-foreground">{viewingProperty.startingAuctionPrice} DA</p>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <Button
+                    className="w-full gap-2"
+                    onClick={() => viewCahier(viewingProperty.id)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    {t("property.viewCahier")}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );
