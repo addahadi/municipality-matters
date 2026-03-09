@@ -60,6 +60,8 @@ const PropertiesPage = () => {
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [saving, setSaving] = useState(false);
   const [cahierFile, setCahierFile] = useState<File | null>(null);
