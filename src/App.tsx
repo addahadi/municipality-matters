@@ -30,6 +30,7 @@ import CitizenReviewsPage from "@/pages/citizen/CitizenReviewsPage";
 import CitizenAnnouncementsPage from "@/pages/citizen/CitizenAnnouncementsPage";
 import CitizenInvoicesPage from "@/pages/citizen/CitizenInvoicesPage";
 import CitizenDocumentsPage from "@/pages/citizen/CitizenDocumentsPage";
+import CitizenAuctionsPage from "@/pages/citizen/CitizenAuctionsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
