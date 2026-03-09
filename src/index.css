@@ -153,9 +153,34 @@
   }
 }
 
-/* Refined table styles */
+/* Refined component styles */
 @layer components {
   .refined-table thead th {
     @apply text-xs uppercase tracking-wider font-semibold text-muted-foreground;
+  }
+}
+
+/* Card filter bars */
+@layer components {
+  .card-filter-bar {
+    @apply p-4 flex flex-col sm:flex-row gap-3 border-b border-border/50;
+  }
+}
+
+/* Empty state styling */
+@layer components {
+  .empty-state {
+    @apply text-center py-16 text-muted-foreground;
+  }
+  .empty-state-icon {
+    @apply mx-auto mb-3 h-10 w-10 text-muted-foreground/40;
+  }
+}
+
+/* Badge refinements */
+@layer base {
+  [data-slot="badge"] {
+    font-weight: 500;
+    letter-spacing: 0.01em;
   }
 }
