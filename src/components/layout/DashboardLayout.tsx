@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Building2, Gavel, FileText, MessageSquare, Megaphone, BarChart3,
   Users, ClipboardList, AlertCircle, Star, LogOut, Menu, Globe,
-  LayoutDashboard, FolderOpen, X,
+  LayoutDashboard, FolderOpen, X, ChevronRight,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -77,53 +77,70 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     return location.pathname.startsWith(to);
   };
 
+  const roleBadgeStyle = () => {
+    switch (role) {
+      case "ADMIN": return "bg-destructive/10 text-destructive border border-destructive/20";
+      case "EMPLOYEE": return "bg-primary/10 text-primary border border-primary/20";
+      default: return "bg-accent/10 text-accent border border-accent/20";
+    }
+  };
+
   const NavContent = () => (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-sidebar-border">
+      {/* Brand */}
+      <div className="p-5 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-sidebar-primary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sidebar-primary to-sidebar-primary/70 flex items-center justify-center shadow-lg shadow-sidebar-primary/20">
             <Building2 className="h-5 w-5 text-sidebar-primary-foreground" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-sm font-bold text-sidebar-foreground block truncate">
+            <span className="text-sm font-bold text-sidebar-foreground block truncate tracking-tight">
               {t("app.title")}
+            </span>
+            <span className="text-[11px] text-sidebar-foreground/50 font-medium">
+              {t("app.subtitle", "Management System")}
             </span>
           </div>
         </div>
       </div>
 
+      {/* Navigation */}
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => (
           <Link
             key={item.to}
             to={item.to}
             onClick={() => setSidebarOpen(false)}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+            className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 ${
               isActive(item.to)
-                ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md shadow-sidebar-primary/25"
+                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             }`}
           >
-            <item.icon className="h-4 w-4 shrink-0" />
-            {item.label}
+            <item.icon className="h-[18px] w-[18px] shrink-0" />
+            <span className="flex-1">{item.label}</span>
+            {isActive(item.to) && (
+              <ChevronRight className="h-3.5 w-3.5 opacity-60" />
+            )}
           </Link>
         ))}
       </nav>
 
+      {/* Footer */}
       <div className="p-3 border-t border-sidebar-border space-y-0.5">
         <button
           onClick={toggleLanguage}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
         >
-          <Globe className="h-4 w-4" />
+          <Globe className="h-[18px] w-[18px]" />
           {i18n.language === "en" ? "العربية" : "English"}
         </button>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-destructive hover:bg-sidebar-accent transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-[18px] w-[18px]" />
           {t("nav.logout")}
         </button>
       </div>
@@ -133,7 +150,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 flex-col bg-sidebar border-e border-sidebar-border shrink-0">
+      <aside className="hidden lg:flex w-[260px] flex-col bg-sidebar border-e border-sidebar-border shrink-0">
         <NavContent />
       </aside>
 
@@ -141,12 +158,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
+            className="absolute inset-0 bg-foreground/25 backdrop-blur-sm"
             onClick={() => setSidebarOpen(false)}
           />
-          <aside className="relative w-64 h-full bg-sidebar shadow-xl animate-fade-in">
+          <aside className="relative w-[260px] h-full bg-sidebar shadow-2xl animate-fade-in">
             <button
-              className="absolute top-3 end-3 p-1 rounded-md text-sidebar-foreground hover:bg-sidebar-accent"
+              className="absolute top-4 end-4 p-1.5 rounded-lg text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-5 w-5" />
@@ -158,25 +175,34 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 shrink-0">
+        <header className="h-[60px] border-b border-border bg-card/80 backdrop-blur-sm flex items-center justify-between px-5 shrink-0">
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden -ms-2"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="h-5 w-5" />
           </Button>
 
           <div className="flex items-center gap-3 ms-auto">
-            <span className="text-sm font-medium text-muted-foreground">{username}</span>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-primary text-primary-foreground font-semibold">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-xs font-bold text-primary">
+                  {username.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div className="hidden sm:block">
+                <span className="text-sm font-medium text-foreground block leading-tight">{username}</span>
+              </div>
+            </div>
+            <span className={`text-[11px] px-2.5 py-1 rounded-full font-semibold ${roleBadgeStyle()}`}>
               {role}
             </span>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 animate-fade-in">
+        <main className="flex-1 overflow-y-auto p-5 md:p-7 animate-fade-in">
           {children}
         </main>
       </div>
