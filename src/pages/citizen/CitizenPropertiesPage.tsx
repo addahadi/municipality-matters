@@ -129,6 +129,44 @@ const CitizenPropertiesPage = () => {
             ))}
           </div>
         )}
+        
+        {/* Purchase Dialog */}
+        <Dialog open={purchaseDialogOpen} onOpenChange={setPurchaseDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('property.purchaseDialog')}</DialogTitle>
+            </DialogHeader>
+            {selectedProperty && (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {t('property.purchaseDescription')}
+                </p>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.name')}:</span>
+                    <p className="text-foreground">{selectedProperty.title}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.location')}:</span>
+                    <p className="text-foreground">{selectedProperty.location}</p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-muted-foreground">{t('property.cahierPrice')}:</span>
+                    <p className="text-foreground font-bold">{selectedProperty.cahierPrice} DA</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 justify-end pt-2">
+                  <Button variant="outline" onClick={() => setPurchaseDialogOpen(false)}>
+                    {t('common.cancel')}
+                  </Button>
+                  <Button onClick={() => handlePurchaseCahier(selectedProperty)} disabled={purchasing}>
+                    {purchasing ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.purchase')}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );
