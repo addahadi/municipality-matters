@@ -206,10 +206,17 @@
     "file": "اسم الملف",
     "download": "تحميل",
     "add": "إضافة وثيقة",
+    "edit": "تعديل الوثيقة",
     "type": "نوع الوثيقة",
     "selectType": "اختر نوع الوثيقة",
     "uploadSuccess": "تم تحميل الوثيقة بنجاح",
-    "uploadError": "فشل تحميل الوثيقة"
+    "uploadError": "فشل تحميل الوثيقة",
+    "updateSuccess": "تم تحديث الوثيقة بنجاح",
+    "updateError": "فشل تحديث الوثيقة",
+    "deleteSuccess": "تم حذف الوثيقة بنجاح",
+    "deleteError": "فشل حذف الوثيقة",
+    "deleteTitle": "حذف الوثيقة",
+    "deleteMessage": "هل تريد فعلاً حذف هذه الوثيقة؟ لا يمكن التراجع عن هذا الإجراء."
   },
   "common": {
     "save": "حفظ",
@@ -241,10 +248,12 @@
     "error": "خطأ",
     "create": "إنشاء",
     "update": "تحديث",
+    "purchase": "شراء",
     "actions": "الإجراءات",
     "upload": "تحميل",
     "selected": "المختار",
-    "selectFile": "يرجى اختيار ملف"
+    "selectFile": "يرجى اختيار ملف",
+    "now": "الآن"
   },
   "validation": {
     "required": "هذا الحقل مطلوب",

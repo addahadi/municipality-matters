@@ -206,10 +206,17 @@
     "file": "File Name",
     "download": "Download",
     "add": "Add Document",
+    "edit": "Edit Document",
     "type": "Document Type",
     "selectType": "Select document type",
     "uploadSuccess": "Document uploaded successfully",
-    "uploadError": "Failed to upload document"
+    "uploadError": "Failed to upload document",
+    "updateSuccess": "Document updated successfully",
+    "updateError": "Failed to update document",
+    "deleteSuccess": "Document deleted successfully",
+    "deleteError": "Failed to delete document",
+    "deleteTitle": "Delete Document",
+    "deleteMessage": "Are you sure you want to delete this document? This action cannot be undone."
   },
   "common": {
     "save": "Save",
@@ -241,10 +248,12 @@
     "error": "Error",
     "create": "Create",
     "update": "Update",
+    "purchase": "Purchase",
     "actions": "Actions",
     "upload": "Upload",
     "selected": "Selected",
-    "selectFile": "Please select a file"
+    "selectFile": "Please select a file",
+    "now": "now"
   },
   "validation": {
     "required": "This field is required",

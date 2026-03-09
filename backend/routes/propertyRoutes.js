@@ -7,8 +7,9 @@ const validate = require("../middlewares/validate");
 const propertyController = require("../controllers/propertyController");
 const { propertySchema } = require("../validations/zodSchemas");
 
+// Store uploads in memory (buffer) instead of disk
 const upload = multer({
-  dest: "uploads/properties/",
+  storage: multer.memoryStorage(),
   limits: { fileSize: 20 * 1024 * 1024 },
 });
 const fields = upload.fields([
@@ -17,6 +18,18 @@ const fields = upload.fields([
 ]);
 
 router.get("/", auth, propertyController.getAll);
+router.get(
+  "/my-cahier-purchases",
+  auth,
+  role("CITIZEN"),
+  propertyController.getMyPurchases,
+);
+router.post(
+  "/:id/purchase-cahier",
+  auth,
+  role("CITIZEN"),
+  propertyController.purchaseCahier,
+);
 router.get("/:id/cahier", auth, propertyController.getCahier);
 router.get("/:id", auth, propertyController.getById);
 router.post(

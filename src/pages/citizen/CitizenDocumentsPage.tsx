@@ -19,6 +19,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -27,7 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import FormFieldWrapper from "@/components/ui/form-field";
-import { Download, FileText, Plus, Loader2 } from "lucide-react";
+import { Download, FileText, Plus, Loader2, Edit2, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { documentsApi } from "@/services/api";
 
@@ -52,6 +61,13 @@ const CitizenDocumentsPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [documentType, setDocumentType] = useState("RESIDENCE_CERTIFICATE");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingDoc, setEditingDoc] = useState<CitizenDocument | null>(null);
+  const [editType, setEditType] = useState("RESIDENCE_CERTIFICATE");
+  const [editing, setEditing] = useState(false);
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [deletingDocId, setDeletingDocId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchDocs = async () => {
     try {
@@ -106,11 +122,52 @@ const CitizenDocumentsPage = () => {
   };
 
   const handleDownload = (doc: CitizenDocument) => {
-    const token = localStorage.getItem("token");
-    window.open(
-      `${import.meta.env.VITE_API_URL || "http://localhost:5000/api"}/documents/${doc.id}/download?token=${token}`,
-      "_blank",
-    );
+    // Open Cloudinary URL directly in new tab
+    window.open(doc.filePath, "_blank");
+  };
+
+  const handleEditOpen = (doc: CitizenDocument) => {
+    setEditingDoc(doc);
+    setEditType(doc.documentType || "RESIDENCE_CERTIFICATE");
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSave = async () => {
+    if (!editingDoc) return;
+
+    setEditing(true);
+    try {
+      await documentsApi.update(editingDoc.id, { documentType: editType });
+      toast({ title: t("documents.updateSuccess"), variant: "success" as any });
+      setEditDialogOpen(false);
+      fetchDocs();
+    } catch (error) {
+      toast({ title: t("documents.updateError"), variant: "destructive" });
+    } finally {
+      setEditing(false);
+    }
+  };
+
+  const handleDeleteOpen = (doc: CitizenDocument) => {
+    setDeletingDocId(doc.id);
+    setDeleteAlertOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingDocId) return;
+
+    setDeleting(true);
+    try {
+      await documentsApi.delete(deletingDocId);
+      toast({ title: t("documents.deleteSuccess"), variant: "success" as any });
+      setDeleteAlertOpen(false);
+      setDeletingDocId(null);
+      fetchDocs();
+    } catch (error) {
+      toast({ title: t("documents.deleteError"), variant: "destructive" });
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
@@ -236,15 +293,35 @@ const CitizenDocumentsPage = () => {
                           {new Date(doc.createdAt).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="gap-1"
-                            onClick={() => handleDownload(doc)}
-                          >
-                            <Download className="h-4 w-4" />
-                            {t("documents.download")}
-                          </Button>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="gap-1"
+                              onClick={() => handleDownload(doc)}
+                            >
+                              <Download className="h-4 w-4" />
+                              {t("documents.download")}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="gap-1"
+                              onClick={() => handleEditOpen(doc)}
+                            >
+                              <Edit2 className="h-4 w-4" />
+                              {t("common.edit")}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="gap-1 text-destructive hover:text-destructive"
+                              onClick={() => handleDeleteOpen(doc)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              {t("common.delete")}
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))
@@ -254,6 +331,66 @@ const CitizenDocumentsPage = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Edit Document Dialog */}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("documents.edit")}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <FormFieldWrapper label={t("documents.type")} required>
+                <Select value={editType} onValueChange={setEditType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("documents.selectType")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DOCUMENT_TYPES.map((dt) => (
+                      <SelectItem key={dt.value} value={dt.value}>
+                        {dt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormFieldWrapper>
+              <Button
+                onClick={handleEditSave}
+                className="w-full"
+                disabled={editing}
+              >
+                {editing ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : null}
+                {t("common.save")}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteAlertOpen} onOpenChange={setDeleteAlertOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("documents.deleteTitle")}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {t("documents.deleteMessage")}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="flex justify-end gap-3">
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleting ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : null}
+                {t("common.delete")}
+              </AlertDialogAction>
+            </div>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </DashboardLayout>
   );

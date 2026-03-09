@@ -9,10 +9,34 @@ const citizenDocumentRepository = {
     return rows;
   },
 
+  async findById(id) {
+    const { rows } = await pool.query(
+      'SELECT id, citizen_id AS "citizenId", file_path AS "filePath", document_type AS "documentType", created_at AS "createdAt" FROM citizen_documents WHERE id = $1',
+      [id],
+    );
+    return rows[0];
+  },
+
   async create({ citizenId, filePath, documentType }) {
     const { rows } = await pool.query(
       "INSERT INTO citizen_documents (citizen_id, file_path, document_type) VALUES ($1,$2,$3) RETURNING *",
       [citizenId, filePath, documentType],
+    );
+    return rows[0];
+  },
+
+  async update(id, { documentType }) {
+    const { rows } = await pool.query(
+      'UPDATE citizen_documents SET document_type = $1 WHERE id = $2 RETURNING id, file_path AS "filePath", document_type AS "documentType", created_at AS "createdAt"',
+      [documentType, id],
+    );
+    return rows[0];
+  },
+
+  async delete(id) {
+    const { rows } = await pool.query(
+      "DELETE FROM citizen_documents WHERE id = $1 RETURNING id",
+      [id],
     );
     return rows[0];
   },

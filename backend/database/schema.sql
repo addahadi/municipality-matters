@@ -115,6 +115,14 @@ CREATE TABLE citizen_documents (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE cahier_purchases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  citizen_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  property_id UUID NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
+  purchased_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(citizen_id, property_id)
+);
+
 -- ============ INDEXES ============
 
 CREATE INDEX idx_auctions_property ON auctions(property_id);
@@ -127,3 +135,5 @@ CREATE INDEX idx_reviews_citizen ON reviews(citizen_id);
 CREATE INDEX idx_messages_sender ON messages(sender_id);
 CREATE INDEX idx_messages_receiver ON messages(receiver_id);
 CREATE INDEX idx_citizen_documents_citizen ON citizen_documents(citizen_id);
+CREATE INDEX idx_cahier_purchases_citizen ON cahier_purchases(citizen_id);
+CREATE INDEX idx_cahier_purchases_property ON cahier_purchases(property_id);

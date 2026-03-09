@@ -1,4 +1,6 @@
 const propertyService = require("../services/propertyService");
+const cahierRepository = require("../repositories/cahierRepository");
+const { uploadToCloudinary } = require("../utils/cloudinaryUpload");
 
 const propertyController = {
   async getAll(req, res) {
@@ -23,8 +25,25 @@ const propertyController = {
   async create(req, res) {
     try {
       const data = req.body;
-      data.cahierDeChargePDF = req.files?.cahierDeChargePDF?.[0]?.path;
-      data.rentalContractPDF = req.files?.rentalContractPDF?.[0]?.path;
+
+      if (req.files?.cahierDeChargePDF?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.cahierDeChargePDF[0],
+          "auto",
+          "municipality/properties/cahier",
+        );
+        data.cahierDeChargePDF = uploadResult.secure_url;
+      }
+
+      if (req.files?.rentalContractPDF?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.rentalContractPDF[0],
+          "auto",
+          "municipality/properties/rental",
+        );
+        data.rentalContractPDF = uploadResult.secure_url;
+      }
+
       const property = await propertyService.create(data);
       res.status(201).json(property);
     } catch (err) {
@@ -35,10 +54,25 @@ const propertyController = {
   async update(req, res) {
     try {
       const data = req.body;
-      if (req.files?.cahierDeChargePDF)
-        data.cahierDeChargePDF = req.files.cahierDeChargePDF[0].path;
-      if (req.files?.rentalContractPDF)
-        data.rentalContractPDF = req.files.rentalContractPDF[0].path;
+
+      if (req.files?.cahierDeChargePDF?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.cahierDeChargePDF[0],
+          "auto",
+          "municipality/properties/cahier",
+        );
+        data.cahierDeChargePDF = uploadResult.secure_url;
+      }
+
+      if (req.files?.rentalContractPDF?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.rentalContractPDF[0],
+          "auto",
+          "municipality/properties/rental",
+        );
+        data.rentalContractPDF = uploadResult.secure_url;
+      }
+
       const property = await propertyService.update(req.params.id, data);
       res.json(property);
     } catch (err) {
@@ -57,15 +91,78 @@ const propertyController = {
 
   async getCahier(req, res) {
     try {
-      const fs = require('fs');
       const property = await propertyService.getById(req.params.id);
       if (!property || !property.cahierDeChargePDF) {
         return res.status(404).json({ error: "PDF not found" });
       }
-      if (!fs.existsSync(property.cahierDeChargePDF)) {
-        return res.status(404).json({ error: "File not found" });
+
+      // Check if citizen has purchased cahier
+      const hasPurchased = await cahierRepository.hasPurchased(
+        req.user.id,
+        req.params.id,
+      );
+
+      if (req.user.role === "CITIZEN" && !hasPurchased) {
+        return res.status(403).json({
+          error: "Access denied",
+          message: "You must purchase this cahier de charge to access it",
+          requiresPayment: true,
+          cahierPrice: property.cahierPrice,
+          purchaseStatus: {
+            hasPurchased,
+            userId: req.user.id,
+            propertyId: req.params.id,
+          },
+        });
       }
-      res.sendFile(require('path').resolve(property.cahierDeChargePDF));
+
+      // Return Cloudinary URL
+      res.json({ url: property.cahierDeChargePDF });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  async purchaseCahier(req, res) {
+    try {
+      const property = await propertyService.getById(req.params.id);
+      if (!property) {
+        return res.status(404).json({ error: "Property not found" });
+      }
+
+      if (!property.cahierDeChargePDF) {
+        return res.status(400).json({ error: "This property has no cahier" });
+      }
+
+      // Record purchase
+      const purchase = await cahierRepository.purchase(
+        req.user.id,
+        req.params.id,
+      );
+
+      if (!purchase) {
+        // Already purchased
+        return res.json({
+          message: "Already purchased",
+          propertyId: req.params.id,
+        });
+      }
+
+      res.status(201).json({
+        message: "Cahier purchased successfully",
+        purchase,
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+
+  async getMyPurchases(req, res) {
+    try {
+      const purchases = await cahierRepository.getPurchasesByCitizen(
+        req.user.id,
+      );
+      res.json(purchases);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

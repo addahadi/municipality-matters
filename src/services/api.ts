@@ -44,7 +44,9 @@ export const authApi = {
 export const propertiesApi = {
   getAll: () => api.get("/properties"),
   getById: (id: string) => api.get(`/properties/${id}`),
-  getCahier: (id: string) => api.get(`/properties/${id}/cahier`, { responseType: 'blob' }),
+  getCahier: (id: string) => api.get(`/properties/${id}/cahier`),
+  purchaseCahier: (id: string) => api.post(`/properties/${id}/purchase-cahier`),
+  getMyPurchases: () => api.get("/properties/my-cahier-purchases"),
   create: (data: FormData) =>
     api.post("/properties", data, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -135,6 +137,9 @@ export const documentsApi = {
       headers: { "Content-Type": "multipart/form-data" },
     }),
   download: (id: string) => api.get(`/documents/${id}/download`),
+  update: (id: string, data: { documentType: string }) =>
+    api.put(`/documents/${id}`, data),
+  delete: (id: string) => api.delete(`/documents/${id}`),
 };
 
 // Statistics
@@ -143,6 +148,8 @@ export const statisticsApi = {
   getEmployeeStats: () => api.get("/statistics/employee"),
   getCitizenStats: () => api.get("/statistics/citizen"),
   getPropertyStats: () => api.get("/statistics/admin"),
+  getRecentActivity: (limit: number = 10) =>
+    api.get(`/statistics/recent-activity?limit=${limit}`),
 };
 
 export default api;
