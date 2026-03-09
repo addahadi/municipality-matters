@@ -59,6 +59,7 @@ export const propertiesApi = {
 // Auctions
 export const auctionsApi = {
   getAll: () => api.get("/auctions"),
+  getBids: (id: string) => api.get(`/auctions/${id}/bids`),
   create: (data: any) => api.post("/auctions", data),
   placeBid: (id: string, data: { amount: number }) =>
     api.post(`/auctions/${id}/bid`, data),

@@ -103,7 +103,17 @@
     "created": "Auction created successfully",
     "closed": "Auction closed successfully",
     "createError": "Failed to create auction",
-    "closeError": "Failed to close auction"
+    "closeError": "Failed to close auction",
+    "details": "Auction Details",
+    "bidHistory": "Bid History",
+    "noBids": "No bids yet",
+    "highestBid": "Highest Bid",
+    "totalBids": "Total Bids",
+    "participants": "Participants",
+    "bidder": "Bidder",
+    "bidAmount": "Bid Amount",
+    "bidDate": "Date",
+    "winner": "Winner"
   },
   "invoices": {
     "citizen": "Citizen",

@@ -103,7 +103,17 @@
     "created": "تم إنشاء المزاد بنجاح",
     "closed": "تم إغلاق المزاد بنجاح",
     "createError": "فشل في إنشاء المزاد",
-    "closeError": "فشل في إغلاق المزاد"
+    "closeError": "فشل في إغلاق المزاد",
+    "details": "تفاصيل المزاد",
+    "bidHistory": "سجل العروض",
+    "noBids": "لا توجد عروض بعد",
+    "highestBid": "أعلى عرض",
+    "totalBids": "إجمالي العروض",
+    "participants": "المشاركون",
+    "bidder": "المزايد",
+    "bidAmount": "مبلغ العرض",
+    "bidDate": "التاريخ",
+    "winner": "الفائز"
   },
   "invoices": {
     "citizen": "المواطن",

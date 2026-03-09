@@ -7,6 +7,7 @@ const auctionController = require("../controllers/auctionController");
 const { auctionSchema, bidSchema } = require("../validations/zodSchemas");
 
 router.get("/", auth, auctionController.getAll);
+router.get("/:id/bids", auth, role("EMPLOYEE", "ADMIN"), auctionController.getBids);
 router.post(
   "/",
   auth,
