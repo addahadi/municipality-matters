@@ -32,7 +32,7 @@ import { propertiesApi } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { propertySchema } from "@/lib/validations";
-import { Plus, Pencil, Trash2, Search, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Loader2, Eye, FileText } from "lucide-react";
 
 type PropertyStatus = "AVAILABLE" | "RENTED" | "AUCTION" | "CLOSED";
 
