@@ -4,9 +4,13 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { propertiesApi } from '@/services/api';
-import { Search, MapPin, Maximize2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import FormFieldWrapper from '@/components/ui/form-field';
+import { propertiesApi, invoicesApi } from '@/services/api';
+import { toast } from '@/hooks/use-toast';
+import { Search, MapPin, Maximize2, FileText, ShoppingCart, Loader2 } from 'lucide-react';
 
 type PropertyStatus = 'AVAILABLE' | 'RENTED' | 'AUCTION' | 'CLOSED';
 
