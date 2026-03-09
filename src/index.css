@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -30,11 +30,11 @@
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 88%;
+    --border: 220 15% 90%;
     --input: 220 15% 88%;
     --ring: 215 80% 42%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
     --success: 145 60% 40%;
     --success-foreground: 0 0% 100%;
@@ -104,6 +104,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   [dir="rtl"] body {
@@ -120,11 +122,40 @@
   [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 1;
   }
+
+  /* Refined scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.35);
+  }
+
+  /* Better focus rings */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
 }
 
 /* Smooth transitions */
 @layer utilities {
   .transition-base {
     @apply transition-all duration-200 ease-in-out;
+  }
+}
+
+/* Refined table styles */
+@layer components {
+  .refined-table thead th {
+    @apply text-xs uppercase tracking-wider font-semibold text-muted-foreground;
   }
 }
