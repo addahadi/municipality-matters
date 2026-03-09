@@ -51,6 +51,11 @@
     "title": "Properties",
     "add": "Add Property",
     "edit": "Edit Property",
+    "view": "View Details",
+    "viewCahier": "View Specifications",
+    "purchaseCahier": "Purchase Specifications",
+    "purchaseDialog": "Purchase Property Specifications",
+    "purchaseDescription": "To access the property specifications (Cahier de Charge), you need to pay the required fee.",
     "name": "Title",
     "location": "Location",
     "superficie": "Area (m²)",
@@ -68,7 +73,9 @@
     "updated": "Property updated successfully",
     "deleted": "Property deleted successfully",
     "saveError": "Failed to save property",
-    "deleteError": "Failed to delete property"
+    "deleteError": "Failed to delete property",
+    "purchased": "Specifications purchased successfully",
+    "purchaseError": "Failed to purchase specifications"
   },
   "dashboard": {
     "welcome": "Welcome back",
