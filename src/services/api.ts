@@ -44,6 +44,7 @@ export const authApi = {
 export const propertiesApi = {
   getAll: () => api.get("/properties"),
   getById: (id: string) => api.get(`/properties/${id}`),
+  getCahier: (id: string) => api.get(`/properties/${id}/cahier`, { responseType: 'blob' }),
   create: (data: FormData) =>
     api.post("/properties", data, {
       headers: { "Content-Type": "multipart/form-data" },
