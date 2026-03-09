@@ -29,6 +29,10 @@ const CitizenPropertiesPage = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [paidCahiers, setPaidCahiers] = useState<Set<string>>(new Set());
+  const [purchasing, setPurchasing] = useState(false);
 
   useEffect(() => { propertiesApi.getAll().then(res => setProperties(res.data)).catch(() => {}); }, []);
 
