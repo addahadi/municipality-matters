@@ -6,6 +6,7 @@ const invoiceController = require("../controllers/invoiceController");
 const { paymentSchema } = require("../validations/zodSchemas");
 
 router.get("/", auth, invoiceController.getAll);
+router.post("/", auth, invoiceController.create);
 router.post("/pay", auth, validate(paymentSchema), invoiceController.pay);
 
 module.exports = router;

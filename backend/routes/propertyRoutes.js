@@ -17,6 +17,7 @@ const fields = upload.fields([
 ]);
 
 router.get("/", auth, propertyController.getAll);
+router.get("/:id/cahier", auth, propertyController.getCahier);
 router.get("/:id", auth, propertyController.getById);
 router.post(
   "/",
