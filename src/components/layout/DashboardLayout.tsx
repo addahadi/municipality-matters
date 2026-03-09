@@ -58,6 +58,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const citizenNav = [
     { to: "/citizen", icon: LayoutDashboard, label: t("nav.dashboard") },
     { to: "/citizen/properties", icon: Building2, label: t("nav.properties") },
+    { to: "/citizen/auctions", icon: Gavel, label: t("nav.auctions") },
     { to: "/citizen/requests", icon: ClipboardList, label: t("nav.requests") },
     { to: "/citizen/complaints", icon: AlertCircle, label: t("nav.complaints") },
     { to: "/citizen/reviews", icon: Star, label: t("nav.reviews") },

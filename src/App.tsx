@@ -67,6 +67,7 @@ const App = () => (
             {/* Citizen */}
             <Route path="/citizen" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenDashboard /></ProtectedRoute>} />
             <Route path="/citizen/properties" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenPropertiesPage /></ProtectedRoute>} />
+            <Route path="/citizen/auctions" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenAuctionsPage /></ProtectedRoute>} />
             <Route path="/citizen/requests" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenRequestsPage /></ProtectedRoute>} />
             <Route path="/citizen/complaints" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenComplaintsPage /></ProtectedRoute>} />
             <Route path="/citizen/reviews" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenReviewsPage /></ProtectedRoute>} />
