@@ -34,7 +34,7 @@ const CitizenAuctionsPage = () => {
   const fetchAuctions = async () => {
     try {
       const res = await auctionsApi.getAll();
-      setAuctions(res.data.filter((a: Auction) => a.status === 'ACTIVE'));
+      setAuctions(res.data.filter((a: Auction) => a.status === 'OPEN'));
     } catch {}
   };
 
