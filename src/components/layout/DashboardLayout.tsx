@@ -138,7 +138,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-destructive hover:bg-destructive/10 transition-colors"
         >
           <LogOut className="h-[18px] w-[18px]" />
           {t("nav.logout")}
