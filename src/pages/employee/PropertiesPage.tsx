@@ -138,6 +138,21 @@ const PropertiesPage = () => {
     }
   };
 
+  const openView = (property: Property) => {
+    setViewingProperty(property);
+    setDetailsDialogOpen(true);
+  };
+
+  const viewCahier = async (propertyId: string) => {
+    try {
+      const response = await propertiesApi.getCahier(propertyId);
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, '_blank');
+    } catch {
+      toast({ title: "PDF not available", variant: "destructive" });
+    }
+  };
+
   const openEdit = (property: Property) => {
     setEditingProperty(property);
     setForm({
