@@ -36,6 +36,39 @@ const CitizenPropertiesPage = () => {
 
   useEffect(() => { propertiesApi.getAll().then(res => setProperties(res.data)).catch(() => {}); }, []);
 
+  const handlePurchaseCahier = async (property: Property) => {
+    setPurchasing(true);
+    try {
+      await invoicesApi.create({
+        propertyId: property.id,
+        total: property.cahierPrice,
+        description: `Cahier de Charge - ${property.title}`,
+      });
+      toast({ title: t('property.purchased'), variant: 'success' as any });
+      setPaidCahiers(prev => new Set(prev).add(property.id));
+      setPurchaseDialogOpen(false);
+    } catch {
+      toast({ title: t('property.purchaseError'), variant: 'destructive' });
+    } finally {
+      setPurchasing(false);
+    }
+  };
+
+  const viewCahier = async (propertyId: string) => {
+    try {
+      const response = await propertiesApi.getCahier(propertyId);
+      const url = window.URL.createObjectURL(response.data);
+      window.open(url, '_blank');
+    } catch {
+      toast({ title: "PDF not available", variant: "destructive" });
+    }
+  };
+
+  const openPurchaseDialog = (property: Property) => {
+    setSelectedProperty(property);
+    setPurchaseDialogOpen(true);
+  };
+
   const filtered = properties.filter(p => {
     const matchSearch = !search || p.title?.toLowerCase().includes(search.toLowerCase()) || p.location?.toLowerCase().includes(search.toLowerCase());
     const matchStatus = filterStatus === 'ALL' || p.status === filterStatus;
