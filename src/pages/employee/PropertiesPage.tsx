@@ -417,8 +417,18 @@ const PropertiesPage = () => {
                             <Button
                               variant="ghost"
                               size="icon"
+                              onClick={() => openView(p)}
+                              className="hover:bg-blue-50 hover:text-blue-600"
+                              title={t("property.view")}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
                               onClick={() => openEdit(p)}
                               className="hover:bg-primary/10 hover:text-primary"
+                              title={t("property.edit")}
                             >
                               <Pencil className="h-4 w-4" />
                             </Button>
@@ -427,6 +437,7 @@ const PropertiesPage = () => {
                               size="icon"
                               onClick={() => handleDelete(p.id)}
                               className="hover:bg-destructive/10 text-destructive"
+                              title={t("common.delete")}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
