@@ -150,9 +150,13 @@ const CitizenAuctionsPage = () => {
                         DA
                       </span>
                     </div>
-                    <p className="text-foreground font-bold text-base pt-1">
-                      {t("auctions.currentBid")}: {auction.currentPrice} DA
-                    </p>
+                    <div className="flex items-center gap-2 text-primary font-semibold">
+                      <DollarSign className="h-4 w-4 shrink-0" />
+                      <span>
+                        {t("auctions.currentBid")}: {auction.currentPrice}{" "}
+                        DA
+                      </span>
+                    </div>
                   </div>
                   <Dialog
                     open={bidDialogOpen && selectedAuction?.id === auction.id}
