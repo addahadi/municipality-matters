@@ -1,11 +1,16 @@
 const auctionRepository = require('../repositories/auctionRepository');
+const propertyRepository = require('../repositories/propertyRepository');
 
 const auctionService = {
   getAll: () => auctionRepository.findAll(),
 
   getBids: (auctionId) => auctionRepository.getBids(auctionId),
 
-  create: (data) => auctionRepository.create(data),
+  async create(data) {
+    const auction = await auctionRepository.create(data);
+    await propertyRepository.update(data.propertyId, { status: 'AUCTION' });
+    return auction;
+  },
 
   async placeBid(auctionId, citizenId, amount) {
     const auction = await auctionRepository.findById(auctionId);
@@ -18,7 +23,11 @@ const auctionService = {
 
   async close(auctionId) {
     const highest = await auctionRepository.getHighestBid(auctionId);
-    return auctionRepository.close(auctionId, highest || 0);
+    const auction = await auctionRepository.close(auctionId, highest || 0);
+    if (auction) {
+      await propertyRepository.update(auction.property_id, { status: 'RENTED' });
+    }
+    return auction;
   },
 };
 

@@ -15,7 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { auctionSchema } from '@/lib/validations';
 import { auctionsApi, propertiesApi } from '@/services/api';
-import { Plus, XCircle, Loader2, Search, Eye, Users, TrendingUp, Trophy, Calendar } from 'lucide-react';
+import { Plus, XCircle, Loader2, Search, Eye, Users, TrendingUp, Trophy, Calendar, History } from 'lucide-react';
 
 interface Bid {
   id: string;
@@ -45,6 +45,7 @@ const AuctionsPage = () => {
   const [saving, setSaving] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [bidHistoryDialogOpen, setBidHistoryDialogOpen] = useState(false);
   const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null);
   const [bids, setBids] = useState<Bid[]>([]);
   const [loadingBids, setLoadingBids] = useState(false);
@@ -105,10 +106,9 @@ const AuctionsPage = () => {
     }
   };
 
-  const handleViewDetails = async (auction: Auction) => {
-    setSelectedAuction(auction);
-    setDetailDialogOpen(true);
+  const fetchBids = async (auction: Auction) => {
     setLoadingBids(true);
+    setBids([]);
     try {
       const res = await auctionsApi.getBids(auction.id);
       setBids(res.data);
@@ -117,6 +117,18 @@ const AuctionsPage = () => {
     } finally {
       setLoadingBids(false);
     }
+  };
+
+  const handleViewDetails = async (auction: Auction) => {
+    setSelectedAuction(auction);
+    setDetailDialogOpen(true);
+    await fetchBids(auction);
+  };
+
+  const handleViewBidHistory = async (auction: Auction) => {
+    setSelectedAuction(auction);
+    setBidHistoryDialogOpen(true);
+    await fetchBids(auction);
   };
 
   const filtered = auctions.filter(a => {
@@ -220,6 +232,9 @@ const AuctionsPage = () => {
                           <Button variant="outline" size="sm" className="gap-1" onClick={() => handleViewDetails(a)}>
                             <Eye className="h-4 w-4" />{t('auctions.details')}
                           </Button>
+                          <Button variant="outline" size="sm" className="gap-1" onClick={() => handleViewBidHistory(a)}>
+                            <History className="h-4 w-4" />{t('auctions.bidHistory')}
+                          </Button>
                           {a.status === 'OPEN' && (
                             <Button variant="destructive" size="sm" className="gap-1" onClick={() => handleClose(a.id)}>
                               <XCircle className="h-4 w-4" />{t('auctions.close')}
@@ -235,9 +250,9 @@ const AuctionsPage = () => {
           </CardContent>
         </Card>
 
-        {/* Auction Details Dialog */}
+        {/* ── Auction Details Dialog ── */}
         <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh]">
+          <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
@@ -246,7 +261,7 @@ const AuctionsPage = () => {
             </DialogHeader>
             {selectedAuction && (
               <div className="space-y-6">
-                {/* Auction Info Cards */}
+                {/* Stats Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <Card className="bg-muted/50">
                     <CardContent className="p-3 text-center">
@@ -276,7 +291,7 @@ const AuctionsPage = () => {
                   </Card>
                 </div>
 
-                {/* Property & Dates Info */}
+                {/* Property & Dates */}
                 <Card>
                   <CardContent className="p-4 space-y-3">
                     <div className="flex justify-between items-center">
@@ -317,58 +332,18 @@ const AuctionsPage = () => {
                   </CardContent>
                 </Card>
 
-                {/* Bid History */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">{t('auctions.bidHistory')}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    {loadingBids ? (
-                      <div className="flex justify-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                      </div>
-                    ) : bids.length === 0 ? (
-                      <div className="text-center py-8 text-muted-foreground">
-                        {t('auctions.noBids')}
-                      </div>
-                    ) : (
-                      <ScrollArea className="h-[200px]">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>#</TableHead>
-                              <TableHead>{t('auctions.bidder')}</TableHead>
-                              <TableHead>{t('auctions.bidAmount')}</TableHead>
-                              <TableHead>{t('auctions.bidDate')}</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {bids.map((bid, idx) => (
-                              <TableRow key={bid.id} className={idx === 0 ? 'bg-primary/5' : ''}>
-                                <TableCell>
-                                  {idx === 0 ? (
-                                    <Trophy className="h-4 w-4 text-yellow-500" />
-                                  ) : (
-                                    idx + 1
-                                  )}
-                                </TableCell>
-                                <TableCell className="font-medium">{bid.citizenName}</TableCell>
-                                <TableCell className={idx === 0 ? 'font-bold text-primary' : ''}>
-                                  {bid.amount} DA
-                                </TableCell>
-                                <TableCell className="text-muted-foreground">
-                                  {new Date(bid.date).toLocaleString()}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </ScrollArea>
-                    )}
-                  </CardContent>
-                </Card>
+                {/* Open Bid History in separate modal */}
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => {
+                    setDetailDialogOpen(false);
+                    setBidHistoryDialogOpen(true);
+                  }}
+                >
+                  <History className="h-4 w-4" /> {t('auctions.bidHistory')}
+                </Button>
 
-                {/* Actions */}
                 {selectedAuction.status === 'OPEN' && (
                   <Button
                     variant="destructive"
@@ -382,6 +357,97 @@ const AuctionsPage = () => {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* ── Bid History Dialog (Separate) ── */}
+        <Dialog open={bidHistoryDialogOpen} onOpenChange={setBidHistoryDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <History className="h-5 w-5" />
+                {t('auctions.bidHistory')}
+                {selectedAuction && (
+                  <span className="text-muted-foreground font-normal text-sm">
+                    — {selectedAuction.propertyTitle}
+                  </span>
+                )}
+              </DialogTitle>
+            </DialogHeader>
+
+            {/* Summary row */}
+            {selectedAuction && (
+              <div className="grid grid-cols-3 gap-3 mb-2">
+                <Card className="bg-primary/10 border-primary/20">
+                  <CardContent className="p-3 text-center">
+                    <div className="text-xs text-muted-foreground mb-1">{t('auctions.highestBid')}</div>
+                    <div className="font-bold text-primary">{selectedAuction.currentPrice} DA</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-muted/50">
+                  <CardContent className="p-3 text-center">
+                    <div className="text-xs text-muted-foreground mb-1">{t('auctions.totalBids')}</div>
+                    <div className="font-semibold">{bids.length}</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-muted/50">
+                  <CardContent className="p-3 text-center">
+                    <div className="text-xs text-muted-foreground mb-1">{t('auctions.participants')}</div>
+                    <div className="font-semibold flex items-center justify-center gap-1">
+                      <Users className="h-4 w-4" /> {uniqueParticipants}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            <Card>
+              <CardContent className="p-0">
+                {loadingBids ? (
+                  <div className="flex justify-center py-12">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  </div>
+                ) : bids.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    {t('auctions.noBids')}
+                  </div>
+                ) : (
+                  <ScrollArea className="h-[380px]">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>#</TableHead>
+                          <TableHead>{t('auctions.bidder')}</TableHead>
+                          <TableHead>{t('auctions.bidAmount')}</TableHead>
+                          <TableHead>{t('auctions.bidDate')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {bids.map((bid, idx) => (
+                          <TableRow key={bid.id} className={idx === 0 ? 'bg-primary/5' : ''}>
+                            <TableCell>
+                              {idx === 0 ? (
+                                <Trophy className="h-4 w-4 text-yellow-500" />
+                              ) : (
+                                idx + 1
+                              )}
+                            </TableCell>
+                            <TableCell className="font-medium">{bid.citizenName}</TableCell>
+                            <TableCell className={idx === 0 ? 'font-bold text-primary' : ''}>
+                              {bid.amount} DA
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                              {new Date(bid.date).toLocaleString()}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </ScrollArea>
+                )}
+              </CardContent>
+            </Card>
+          </DialogContent>
+        </Dialog>
+
       </div>
     </DashboardLayout>
   );

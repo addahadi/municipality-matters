@@ -146,8 +146,14 @@ const PropertiesPage = () => {
   const viewCahier = async (propertyId: string) => {
     try {
       const response = await propertiesApi.getCahier(propertyId);
-      const url = window.URL.createObjectURL(response.data);
-      window.open(url, '_blank');
+      // Assuming the API returns JSON with the URL
+      if (response.data && response.data.url) {
+        window.open(response.data.url, '_blank');
+      } else {
+        // Fallback in case it's actually returning a Blob
+        const url = window.URL.createObjectURL(response.data);
+        window.open(url, '_blank');
+      }
     } catch {
       toast({ title: "PDF not available", variant: "destructive" });
     }
