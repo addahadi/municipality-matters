@@ -185,33 +185,28 @@ const LandingPage = () => {
       </header>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden py-24 sm:py-36">
-        {/* ── Background image + overlays ── */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          {/* Actual hero image */}
-          <img
-            src="../../public/hero-bg.png"
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-center"
-            style={{ opacity: 0.55 }}
-          />
-          {/* Light top-to-bottom gradient — just enough so text pops at top, fades to bg at bottom */}
-          <div
-            className="absolute inset-0"
-            style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 50%, var(--background) 100%)" }}
-          />
-          {/* Subtle colour tint */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-violet-900/15" />
-          {/* Dot grid */}
-          <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-        </div>
-
+      <section
+        className="relative overflow-hidden py-24 sm:py-36"
+        style={{
+          backgroundImage: `
+            linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.30) 50%, var(--background, #fff) 100%),
+            url('/hero-bg.png')
+          `,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* Dot grid overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 -z-0 opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+        {/* Color tint */}
+        <div className="pointer-events-none absolute inset-0 -z-0 bg-gradient-to-br from-primary/15 via-transparent to-violet-900/15" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div data-hero className="mx-auto max-w-4xl">

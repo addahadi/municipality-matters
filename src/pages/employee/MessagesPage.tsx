@@ -230,11 +230,11 @@ const MessagesPage = () => {
           </div>
 
           {/* Chat Window */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full bg-background relative">
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full min-h-0 bg-background relative">
             {activeUserId ? (
               <>
-                {/* Chat Header */}
-                <div className="flex items-center gap-3 p-4 border-b bg-card z-10">
+                {/* Chat Header — fixed, never scrolls */}
+                <div className="flex items-center gap-3 p-4 border-b bg-card z-10 shrink-0">
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary/10 text-primary font-medium">
                       {getInitials(conversationsMap.get(activeUserId)?.username || employees.find(e => e.id === activeUserId)?.username || '')}
@@ -254,8 +254,9 @@ const MessagesPage = () => {
                   </div>
                 </div>
 
-                {/* Messages Area */}
-                <ScrollArea className="flex-1 p-4">
+                {/* Messages Area — scrollable flex child */}
+                <div className="flex-1 min-h-0 overflow-hidden">
+                <ScrollArea className="h-full p-4">
                   <div className="space-y-4 flex flex-col pb-4">
                     {activeMessages.length === 0 ? (
                       <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground py-20 mt-10">
@@ -307,9 +308,11 @@ const MessagesPage = () => {
                     <div ref={chatScrollRef} />
                   </div>
                 </ScrollArea>
+                </div>
 
                 {/* Input Area */}
-                <div className="p-4 border-t bg-card z-10 m-2 rounded-xl shadow-sm border">
+                {/* Input — pinned to bottom */}
+                <div className="shrink-0 p-4 border-t bg-card z-10 m-2 rounded-xl shadow-sm border">
                   <div className="flex items-end gap-2 relative">
                     <Textarea 
                       value={draft}
