@@ -172,9 +172,9 @@ const MessagesPage = () => {
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-full overflow-hidden border rounded-xl bg-card shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full overflow-hidden border rounded-xl bg-card shadow-sm">
           {/* Conversation List Sidebar */}
-          <div className="col-span-1 border-r flex flex-col h-full overflow-hidden bg-muted/10">
+          <div className={`col-span-1 border-e flex flex-col h-full overflow-hidden bg-muted/10 ${activeUserId ? 'hidden md:flex' : 'flex'}`}>
             <div className="p-4 border-b bg-card">
               <h2 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">{t('messages.conversations')}</h2>
             </div>
@@ -230,11 +230,20 @@ const MessagesPage = () => {
           </div>
 
           {/* Chat Window */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full min-h-0 bg-background relative">
+          <div className={`col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full min-h-0 bg-background relative ${!activeUserId ? 'hidden md:flex' : 'flex'}`}>
             {activeUserId ? (
               <>
                 {/* Chat Header — fixed, never scrolls */}
                 <div className="flex items-center gap-3 p-4 border-b bg-card z-10 shrink-0">
+                  {/* Back button for mobile */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden -ms-2 shrink-0"
+                    onClick={() => setActiveUserId(null)}
+                  >
+                    <CornerDownLeft className="h-4 w-4" />
+                  </Button>
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary/10 text-primary font-medium">
                       {getInitials(conversationsMap.get(activeUserId)?.username || employees.find(e => e.id === activeUserId)?.username || '')}

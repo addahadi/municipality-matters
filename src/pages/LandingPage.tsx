@@ -169,12 +169,12 @@ const LandingPage = () => {
           </div>
 
           {/* Nav actions */}
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-1.5 text-muted-foreground hover:text-foreground">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-1.5 text-muted-foreground hover:text-foreground px-2 sm:px-3">
               <Globe className="h-4 w-4" />
-              {i18n.language === "en" ? "العربية" : "English"}
+              <span className="hidden sm:inline">{i18n.language === "en" ? "العربية" : "English"}</span>
             </Button>
-            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground hidden sm:inline-flex">
               <Link to="/login">{t("auth.login")}</Link>
             </Button>
             <Button size="sm" asChild className="bg-primary shadow-md shadow-primary/30 hover:shadow-primary/40 hover:shadow-lg transition-shadow">
@@ -217,7 +217,7 @@ const LandingPage = () => {
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl leading-[1.08]">
+            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl leading-[1.08]">
               <span className="block text-foreground">{t("landing.heroTitle")}</span>
               <span className="block mt-2 bg-gradient-to-r from-primary via-violet-500 to-cyan-500 bg-clip-text text-transparent">
                 {t("app.title")}
@@ -225,7 +225,7 @@ const LandingPage = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-7 text-lg text-muted-foreground leading-relaxed sm:text-xl max-w-2xl mx-auto">
+            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-muted-foreground leading-relaxed lg:text-xl max-w-2xl mx-auto">
               {t("landing.heroSubtitle")}
             </p>
 
@@ -272,7 +272,7 @@ const LandingPage = () => {
       <section data-stats className="relative py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-violet-500/5 to-cyan-500/5" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
             {[
               { value: 10000, suffix: "+", label: t("landing.statProperties") },
               { value: 5000,  suffix: "+", label: t("landing.statCitizens") },
@@ -284,7 +284,7 @@ const LandingPage = () => {
                 data-stat
                 className="group relative rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6 text-center shadow-sm hover:shadow-md hover:border-primary/25 transition-all duration-300"
               >
-                <p className="text-4xl font-extrabold bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
+                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
                   <AnimatedNumber target={stat.value} suffix={stat.suffix} />
                 </p>
                 <p className="mt-2 text-sm font-medium text-muted-foreground">{stat.label}</p>
