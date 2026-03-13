@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
+
 const authRoutes = require("./routes/authRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
 const auctionRoutes = require("./routes/auctionRoutes");
@@ -16,8 +17,9 @@ const documentRoutes = require("./routes/documentRoutes");
 
 const app = express();
 
-
+app.use(cors());
 app.use(express.json());
+
 
 // Routes
 app.use("/api/auth", authRoutes);
