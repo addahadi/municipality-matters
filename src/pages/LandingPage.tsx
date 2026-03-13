@@ -217,7 +217,7 @@ const LandingPage = () => {
             </div>
 
             {/* Headline */}
-            <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl leading-[1.08]">
+            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl leading-[1.08]">
               <span className="block text-foreground">{t("landing.heroTitle")}</span>
               <span className="block mt-2 bg-gradient-to-r from-primary via-violet-500 to-cyan-500 bg-clip-text text-transparent">
                 {t("app.title")}
