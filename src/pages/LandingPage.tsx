@@ -225,7 +225,7 @@ const LandingPage = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-7 text-lg text-muted-foreground leading-relaxed sm:text-xl max-w-2xl mx-auto">
+            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-muted-foreground leading-relaxed lg:text-xl max-w-2xl mx-auto">
               {t("landing.heroSubtitle")}
             </p>
 
