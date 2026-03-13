@@ -272,7 +272,7 @@ const LandingPage = () => {
       <section data-stats className="relative py-14 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-violet-500/5 to-cyan-500/5" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
             {[
               { value: 10000, suffix: "+", label: t("landing.statProperties") },
               { value: 5000,  suffix: "+", label: t("landing.statCitizens") },
