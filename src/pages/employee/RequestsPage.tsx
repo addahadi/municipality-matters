@@ -90,9 +90,9 @@ const RequestsPage = () => {
                       <TableCell>{new Date(req.date).toLocaleDateString()}</TableCell>
                       <TableCell>
                         {req.status === 'PENDING' && (
-                          <div className="flex gap-2">
-                            <Button size="sm" className="gap-1" onClick={() => handleApprove(req.id)}><CheckCircle className="h-4 w-4" />{t('requests.approve')}</Button>
-                            <Button size="sm" variant="destructive" className="gap-1" onClick={() => handleReject(req.id)}><XCircle className="h-4 w-4" />{t('requests.reject')}</Button>
+                          <div className="flex flex-wrap gap-1">
+                            <Button size="sm" className="gap-1" onClick={() => handleApprove(req.id)}><CheckCircle className="h-4 w-4" /><span className="hidden sm:inline">{t('requests.approve')}</span></Button>
+                            <Button size="sm" variant="destructive" className="gap-1" onClick={() => handleReject(req.id)}><XCircle className="h-4 w-4" /><span className="hidden sm:inline">{t('requests.reject')}</span></Button>
                           </div>
                         )}
                       </TableCell>
