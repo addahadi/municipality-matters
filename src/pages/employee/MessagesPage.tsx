@@ -172,9 +172,9 @@ const MessagesPage = () => {
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-full overflow-hidden border rounded-xl bg-card shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full overflow-hidden border rounded-xl bg-card shadow-sm">
           {/* Conversation List Sidebar */}
-          <div className="col-span-1 border-r flex flex-col h-full overflow-hidden bg-muted/10">
+          <div className={`col-span-1 border-e flex flex-col h-full overflow-hidden bg-muted/10 ${activeUserId ? 'hidden md:flex' : 'flex'}`}>
             <div className="p-4 border-b bg-card">
               <h2 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Conversations</h2>
             </div>
