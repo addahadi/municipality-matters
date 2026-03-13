@@ -169,7 +169,7 @@ const AuctionsPage = () => {
             <DialogTrigger asChild>
               <Button className="gap-2"><Plus className="h-4 w-4" />{t('auctions.create')}</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[85vh] overflow-y-auto">
               <DialogHeader><DialogTitle>{t('auctions.create')}</DialogTitle></DialogHeader>
               <div className="space-y-4">
                 <FormFieldWrapper label={t('nav.properties')} error={errors.propertyId} required>
@@ -286,7 +286,7 @@ const AuctionsPage = () => {
 
         {/* ── Auction Details Dialog ── */}
         <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
@@ -415,7 +415,7 @@ const AuctionsPage = () => {
 
         {/* ── Bid History Dialog (Separate) ── */}
         <Dialog open={bidHistoryDialogOpen} onOpenChange={setBidHistoryDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh]">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <History className="h-5 w-5" />

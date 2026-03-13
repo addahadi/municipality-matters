@@ -232,7 +232,7 @@ const PropertiesPage = () => {
                 {t("property.add")}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   {editingProperty ? t("property.edit") : t("property.add")}
@@ -500,7 +500,7 @@ const PropertiesPage = () => {
 
         {/* Property Details Dialog */}
         <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{t("property.view")}</DialogTitle>
             </DialogHeader>
