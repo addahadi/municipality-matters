@@ -169,12 +169,12 @@ const LandingPage = () => {
           </div>
 
           {/* Nav actions */}
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-1.5 text-muted-foreground hover:text-foreground">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-1.5 text-muted-foreground hover:text-foreground px-2 sm:px-3">
               <Globe className="h-4 w-4" />
-              {i18n.language === "en" ? "العربية" : "English"}
+              <span className="hidden sm:inline">{i18n.language === "en" ? "العربية" : "English"}</span>
             </Button>
-            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground hidden sm:inline-flex">
               <Link to="/login">{t("auth.login")}</Link>
             </Button>
             <Button size="sm" asChild className="bg-primary shadow-md shadow-primary/30 hover:shadow-primary/40 hover:shadow-lg transition-shadow">
