@@ -176,7 +176,18 @@
     "content": "Message",
     "send": "Send",
     "sent": "Message sent successfully",
-    "sendError": "Failed to send message"
+    "sendError": "Failed to send message",
+    "conversations": "Conversations",
+    "noMessages": "No messages yet.",
+    "startChatting": "Start Chatting",
+    "active": "Active",
+    "startConversation": "Start the conversation",
+    "typeMessage": "Type your message...",
+    "pressEnter": "Press Enter to send",
+    "yourMessages": "Your Messages",
+    "selectOrStart": "Select a conversation from the sidebar or start a new chat with an employee.",
+    "startNew": "Start a conversation",
+    "you": "You"
   },
   "accounts": {
     "role": "Role",

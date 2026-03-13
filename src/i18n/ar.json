@@ -176,7 +176,18 @@
     "content": "الرسالة",
     "send": "إرسال",
     "sent": "تم إرسال الرسالة بنجاح",
-    "sendError": "فشل في إرسال الرسالة"
+    "sendError": "فشل في إرسال الرسالة",
+    "conversations": "المحادثات",
+    "noMessages": "لا توجد رسائل بعد.",
+    "startChatting": "ابدأ المحادثة",
+    "active": "نشط",
+    "startConversation": "ابدأ المحادثة",
+    "typeMessage": "اكتب رسالتك...",
+    "pressEnter": "اضغط Enter للإرسال",
+    "yourMessages": "رسائلك",
+    "selectOrStart": "اختر محادثة من الشريط الجانبي أو ابدأ محادثة جديدة مع موظف.",
+    "startNew": "ابدأ محادثة",
+    "you": "أنت"
   },
   "accounts": {
     "role": "الدور",

@@ -166,7 +166,7 @@ const MessagesPage = () => {
                 </Select>
               </FormFieldWrapper>
               <Button onClick={handleStartNewChat} className="w-full">
-                Start Chatting
+                {t('messages.startChatting')}
               </Button>
             </div>
           </DialogContent>
@@ -176,7 +176,7 @@ const MessagesPage = () => {
           {/* Conversation List Sidebar */}
           <div className="col-span-1 border-r flex flex-col h-full overflow-hidden bg-muted/10">
             <div className="p-4 border-b bg-card">
-              <h2 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Conversations</h2>
+              <h2 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">{t('messages.conversations')}</h2>
             </div>
             <ScrollArea className="flex-1">
               {loading ? (
@@ -184,7 +184,7 @@ const MessagesPage = () => {
               ) : conversations.length === 0 ? (
                 <div className="p-8 text-center text-muted-foreground text-sm flex flex-col items-center gap-2">
                   <MessageSquarePlus className="h-8 w-8 opacity-20" />
-                  <p>No messages yet.</p>
+                  <p>{t('messages.noMessages')}</p>
                 </div>
               ) : (
                 <div className="flex flex-col">
@@ -193,7 +193,7 @@ const MessagesPage = () => {
                       key={c.userId}
                       onClick={() => setActiveUserId(c.userId)}
                       className={cn(
-                        "flex items-start gap-3 p-4 text-left transition-colors border-b last:border-b-0",
+                        "flex items-start gap-3 p-4 text-left w-full transition-colors border-b last:border-b-0",
                         activeUserId === c.userId ? "bg-primary/5 hover:bg-primary/10" : "hover:bg-muted/50",
                         c.unreadCount > 0 ? "bg-background" : ""
                       )}
@@ -203,7 +203,7 @@ const MessagesPage = () => {
                           {getInitials(c.username)}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="flex-1 overflow-hidden">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         <div className="flex justify-between items-baseline mb-1">
                           <span className={cn("font-medium truncate", c.unreadCount > 0 && "font-bold text-foreground")}>
                             {c.username}
@@ -213,7 +213,7 @@ const MessagesPage = () => {
                           </span>
                         </div>
                         <p className={cn("text-xs truncate", c.unreadCount > 0 ? "font-medium text-foreground" : "text-muted-foreground")}>
-                          {c.lastMessage.senderId === user?.id ? 'You: ' : ''}
+                          {c.lastMessage.senderId === user?.id ? `${t('messages.you')}: ` : ''}
                           {c.lastMessage.content}
                         </p>
                       </div>
@@ -249,7 +249,7 @@ const MessagesPage = () => {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                       </span>
-                      Active
+                      {t('messages.active')}
                     </p>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ const MessagesPage = () => {
                         <div className="bg-muted p-4 rounded-full mb-4">
                           <User className="h-8 w-8 opacity-50" />
                         </div>
-                        <p className="text-sm">Start the conversation</p>
+                        <p className="text-sm">{t('messages.startConversation')}</p>
                       </div>
                     ) : (
                       activeMessages.map((msg, index) => {
@@ -287,7 +287,7 @@ const MessagesPage = () => {
                                 </Avatar>
                               )}
                               <div className={cn(
-                                "rounded-2xl px-4 py-2 shadow-sm text-sm relative group whitespace-pre-wrap",
+                                "rounded-2xl px-4 py-2 shadow-sm text-sm relative group whitespace-pre-wrap break-words",
                                 isMe 
                                   ? "bg-primary text-primary-foreground rounded-br-sm" 
                                   : "bg-muted text-foreground rounded-bl-sm border border-border/50"
@@ -317,7 +317,7 @@ const MessagesPage = () => {
                     <Textarea 
                       value={draft}
                       onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Type your message..."
+                      placeholder={t('messages.typeMessage')}
                       className="min-h-[50px] max-h-[150px] resize-none pb-12 rounded-lg border-muted-foreground/20 focus-visible:ring-1 focus-visible:ring-primary/50"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -328,7 +328,7 @@ const MessagesPage = () => {
                     />
                     <div className="absolute right-3 bottom-3 flex items-center gap-2">
                       <span className="text-[10px] text-muted-foreground hidden sm:flex items-center mr-2">
-                        Press Enter to send
+                        {t('messages.pressEnter')}
                         <CornerDownLeft className="h-3 w-3 ml-1" />
                       </span>
                       <Button 
@@ -348,10 +348,10 @@ const MessagesPage = () => {
                 <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mb-6 shadow-inner">
                   <MessageSquarePlus className="h-10 w-10 opacity-30" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">Your Messages</h3>
-                <p className="max-w-[250px] mb-8 text-sm">Select a conversation from the sidebar or start a new chat with an employee.</p>
+                <h3 className="text-xl font-semibold text-foreground mb-2">{t('messages.yourMessages')}</h3>
+                <p className="max-w-[250px] mb-8 text-sm">{t('messages.selectOrStart')}</p>
                 <Button onClick={() => setDialogOpen(true)} variant="outline" className="gap-2 bg-background shadow-sm hover:shadow">
-                  <MessageSquarePlus className="h-4 w-4" /> Start a conversation
+                  <MessageSquarePlus className="h-4 w-4" /> {t('messages.startNew')}
                 </Button>
               </div>
             )}
