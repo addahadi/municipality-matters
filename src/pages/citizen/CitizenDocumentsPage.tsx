@@ -51,6 +51,8 @@ interface CitizenDocument {
 const DOCUMENT_TYPES = [
   { value: "RESIDENCE_CERTIFICATE", label: "شهادة اقامة" },
   { value: "BIRTH_CERTIFICATE", label: "شهادة ميلاد" },
+  { value: "TAX_CLEARANCE_CERTIFICATE", label: "شهادة اداء المستحقات الضريبية لا تتجاوز ثلاثة اشهر" },
+  { value: "TAX_ID_NUMBER", label: "رقم تعريف الجبائي" },
 ];
 
 const CitizenDocumentsPage = () => {
