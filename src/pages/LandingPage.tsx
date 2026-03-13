@@ -149,6 +149,13 @@ const LandingPage = () => {
 
   return (
     <div ref={mainRef} className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      {/* ── Diagonal Lines Overlay ── */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-[1] opacity-40"
+        style={{
+          background: `linear-gradient(to top right, transparent calc(50% - 12px), red calc(50% - 12px), red 50%, green 50%, green calc(50% + 12px), transparent calc(50% + 12px))`
+        }}
+      />
 
       {/* ── Navbar ── */}
       <header
