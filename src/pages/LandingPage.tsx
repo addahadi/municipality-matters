@@ -284,7 +284,7 @@ const LandingPage = () => {
                 data-stat
                 className="group relative rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6 text-center shadow-sm hover:shadow-md hover:border-primary/25 transition-all duration-300"
               >
-                <p className="text-4xl font-extrabold bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
+                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
                   <AnimatedNumber target={stat.value} suffix={stat.suffix} />
                 </p>
                 <p className="mt-2 text-sm font-medium text-muted-foreground">{stat.label}</p>

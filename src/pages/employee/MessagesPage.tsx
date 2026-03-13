@@ -230,11 +230,20 @@ const MessagesPage = () => {
           </div>
 
           {/* Chat Window */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full min-h-0 bg-background relative">
+          <div className={`col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full min-h-0 bg-background relative ${!activeUserId ? 'hidden md:flex' : 'flex'}`}>
             {activeUserId ? (
               <>
                 {/* Chat Header — fixed, never scrolls */}
                 <div className="flex items-center gap-3 p-4 border-b bg-card z-10 shrink-0">
+                  {/* Back button for mobile */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden -ms-2 shrink-0"
+                    onClick={() => setActiveUserId(null)}
+                  >
+                    <CornerDownLeft className="h-4 w-4" />
+                  </Button>
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="bg-primary/10 text-primary font-medium">
                       {getInitials(conversationsMap.get(activeUserId)?.username || employees.find(e => e.id === activeUserId)?.username || '')}

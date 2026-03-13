@@ -228,16 +228,16 @@ const AuctionsPage = () => {
                         <Badge variant={a.status === 'OPEN' ? 'default' : 'secondary'}>{a.status}</Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-1">
                           <Button variant="outline" size="sm" className="gap-1" onClick={() => handleViewDetails(a)}>
-                            <Eye className="h-4 w-4" />{t('auctions.details')}
+                            <Eye className="h-4 w-4" /><span className="hidden lg:inline">{t('auctions.details')}</span>
                           </Button>
                           <Button variant="outline" size="sm" className="gap-1" onClick={() => handleViewBidHistory(a)}>
-                            <History className="h-4 w-4" />{t('auctions.bidHistory')}
+                            <History className="h-4 w-4" /><span className="hidden lg:inline">{t('auctions.bidHistory')}</span>
                           </Button>
                           {a.status === 'OPEN' && (
                             <Button variant="destructive" size="sm" className="gap-1" onClick={() => handleClose(a.id)}>
-                              <XCircle className="h-4 w-4" />{t('auctions.close')}
+                              <XCircle className="h-4 w-4" /><span className="hidden lg:inline">{t('auctions.close')}</span>
                             </Button>
                           )}
                         </div>

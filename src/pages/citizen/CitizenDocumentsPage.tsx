@@ -293,33 +293,36 @@ const CitizenDocumentsPage = () => {
                           {new Date(doc.createdAt).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-1">
                             <Button
-                              size="sm"
+                              size="icon"
                               variant="outline"
-                              className="gap-1"
+                              className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-1 sm:px-3"
                               onClick={() => handleDownload(doc)}
+                              title={t("documents.download")}
                             >
                               <Download className="h-4 w-4" />
-                              {t("documents.download")}
+                              <span className="hidden sm:inline">{t("documents.download")}</span>
                             </Button>
                             <Button
-                              size="sm"
+                              size="icon"
                               variant="outline"
-                              className="gap-1"
+                              className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-1 sm:px-3"
                               onClick={() => handleEditOpen(doc)}
+                              title={t("common.edit")}
                             >
                               <Edit2 className="h-4 w-4" />
-                              {t("common.edit")}
+                              <span className="hidden sm:inline">{t("common.edit")}</span>
                             </Button>
                             <Button
-                              size="sm"
+                              size="icon"
                               variant="outline"
-                              className="gap-1 text-destructive hover:text-destructive"
+                              className="h-8 w-8 sm:h-auto sm:w-auto sm:gap-1 sm:px-3 text-destructive hover:text-destructive"
                               onClick={() => handleDeleteOpen(doc)}
+                              title={t("common.delete")}
                             >
                               <Trash2 className="h-4 w-4" />
-                              {t("common.delete")}
+                              <span className="hidden sm:inline">{t("common.delete")}</span>
                             </Button>
                           </div>
                         </TableCell>
