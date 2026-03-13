@@ -76,7 +76,7 @@ const adminCreateUserSchema = z.object({
 
 const documentUploadSchema = z.object({
   documentType: z
-    .enum(["RESIDENCE_CERTIFICATE", "BIRTH_CERTIFICATE"])
+    .enum(["RESIDENCE_CERTIFICATE", "BIRTH_CERTIFICATE", "TAX_CLEARANCE_CERTIFICATE", "TAX_ID_NUMBER"])
     .default("RESIDENCE_CERTIFICATE"),
 });
 
