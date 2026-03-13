@@ -63,8 +63,8 @@ export const propertySchema = z.object({
 
 export const auctionSchema = z.object({
   propertyId: z.string().min(1, "validation.required"),
-  startDate: z.string().min(1, "validation.required"),
-  endDate: z.string().min(1, "validation.required"),
+  startDate: z.string().refine((val) => !isNaN(new Date(val).getTime()), "validation.invalidDate"),
+  endDate: z.string().refine((val) => !isNaN(new Date(val).getTime()), "validation.invalidDate"),
   startingPrice: z
     .string()
     .refine(

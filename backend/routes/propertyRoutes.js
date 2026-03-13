@@ -15,6 +15,7 @@ const upload = multer({
 const fields = upload.fields([
   { name: "cahierDeChargePDF", maxCount: 1 },
   { name: "rentalContractPDF", maxCount: 1 },
+  { name: "propertyImage", maxCount: 1 },
 ]);
 
 router.get("/", auth, propertyController.getAll);
@@ -23,6 +24,12 @@ router.get(
   auth,
   role("CITIZEN"),
   propertyController.getMyPurchases,
+);
+router.get(
+  "/my-rentals",
+  auth,
+  role("CITIZEN"),
+  propertyController.getMyRentals,
 );
 router.post(
   "/:id/purchase-cahier",

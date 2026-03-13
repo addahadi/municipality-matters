@@ -7,6 +7,7 @@ const propertyService = {
   update: (id, data) => propertyRepository.update(id, data),
   delete: (id) => propertyRepository.delete(id),
   getStats: () => propertyRepository.getStats(),
+  getByTenant: (tenantId) => propertyRepository.findByTenant(tenantId),
 };
 
 module.exports = propertyService;

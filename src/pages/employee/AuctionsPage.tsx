@@ -34,6 +34,7 @@ interface Auction {
   startingPrice: string;
   currentPrice: string;
   finalPrice: string | null;
+  propertyImage?: string;
   createdAt: string;
 }
 
@@ -51,6 +52,8 @@ const AuctionsPage = () => {
   const [loadingBids, setLoadingBids] = useState(false);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
+  const [contractFile, setContractFile] = useState<File | null>(null);
+  const [uploadingContract, setUploadingContract] = useState(false);
   const [form, setForm] = useState({ propertyId: '', startDate: '', endDate: '', startingPrice: '' });
   const { errors, validate, clearFieldError, clearErrors } = useFormValidation(auctionSchema);
 
@@ -103,6 +106,23 @@ const AuctionsPage = () => {
       }
     } catch {
       toast({ title: t('auctions.closeError'), variant: 'destructive' });
+    }
+  };
+
+  const handleContractUpload = async (propertyId: string) => {
+    if (!contractFile) return;
+    setUploadingContract(true);
+    try {
+      const formData = new FormData();
+      formData.append('rentalContractPDF', contractFile);
+      await propertiesApi.update(propertyId, formData);
+      toast({ title: t('property.contractUploaded'), variant: 'success' as any });
+      setContractFile(null);
+      fetchData();
+    } catch {
+      toast({ title: t('common.error'), variant: 'destructive' });
+    } finally {
+      setUploadingContract(false);
     }
   };
 
@@ -166,10 +186,10 @@ const AuctionsPage = () => {
                 </FormFieldWrapper>
                 <div className="grid grid-cols-2 gap-4">
                   <FormFieldWrapper label={t('auctions.startDate')} error={errors.startDate} required>
-                    <Input type="date" value={form.startDate} onChange={e => updateField('startDate', e.target.value)} className={errors.startDate ? 'border-destructive' : ''} />
+                    <Input type="datetime-local" value={form.startDate} onChange={e => updateField('startDate', e.target.value)} className={errors.startDate ? 'border-destructive' : ''} />
                   </FormFieldWrapper>
                   <FormFieldWrapper label={t('auctions.endDate')} error={errors.endDate} required>
-                    <Input type="date" value={form.endDate} onChange={e => updateField('endDate', e.target.value)} className={errors.endDate ? 'border-destructive' : ''} />
+                    <Input type="datetime-local" value={form.endDate} onChange={e => updateField('endDate', e.target.value)} className={errors.endDate ? 'border-destructive' : ''} />
                   </FormFieldWrapper>
                 </div>
                 <FormFieldWrapper label={t('auctions.startingPrice')} error={errors.startingPrice} required>
@@ -203,6 +223,7 @@ const AuctionsPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[80px]">{t("property.image")}</TableHead>
                     <TableHead>{t('nav.properties')}</TableHead>
                     <TableHead>{t('auctions.startDate')}</TableHead>
                     <TableHead>{t('auctions.endDate')}</TableHead>
@@ -216,12 +237,25 @@ const AuctionsPage = () => {
                   {loading ? (
                     <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">{t('common.loading')}</TableCell></TableRow>
                   ) : filtered.length === 0 ? (
-                    <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">{t('common.noData')}</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={8} className="text-center py-12 text-muted-foreground">{t('common.noData')}</TableCell></TableRow>
                   ) : filtered.map((a) => (
                     <TableRow key={a.id} className="hover:bg-muted/50 transition-colors">
+                      <TableCell>
+                        {a.propertyImage ? (
+                          <img
+                            src={a.propertyImage}
+                            alt={a.propertyTitle}
+                            className="h-10 w-10 object-cover rounded shadow-sm"
+                          />
+                        ) : (
+                          <div className="h-10 w-10 bg-muted flex items-center justify-center rounded text-muted-foreground text-[10px] text-center p-1 leading-tight">
+                            {t("property.noImage")}
+                          </div>
+                        )}
+                      </TableCell>
                       <TableCell className="font-medium">{a.propertyTitle || a.propertyId}</TableCell>
-                      <TableCell>{new Date(a.startDate).toLocaleDateString()}</TableCell>
-                      <TableCell>{new Date(a.endDate).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(a.startDate).toLocaleString()}</TableCell>
+                      <TableCell>{new Date(a.endDate).toLocaleString()}</TableCell>
                       <TableCell>{a.startingPrice} DA</TableCell>
                       <TableCell className="font-semibold text-primary">{a.currentPrice} DA</TableCell>
                       <TableCell>
@@ -303,13 +337,13 @@ const AuctionsPage = () => {
                       <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Calendar className="h-4 w-4" /> {t('auctions.startDate')}
                       </span>
-                      <span>{new Date(selectedAuction.startDate).toLocaleDateString()}</span>
+                       <span>{new Date(selectedAuction.startDate).toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Calendar className="h-4 w-4" /> {t('auctions.endDate')}
                       </span>
-                      <span>{new Date(selectedAuction.endDate).toLocaleDateString()}</span>
+                      <span>{new Date(selectedAuction.endDate).toLocaleString()}</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between items-center">
@@ -352,6 +386,27 @@ const AuctionsPage = () => {
                   >
                     <XCircle className="h-4 w-4" /> {t('auctions.close')}
                   </Button>
+                )}
+
+                {selectedAuction.status === 'CLOSED' && (
+                  <div className="space-y-3 pt-4 border-t">
+                    <h3 className="text-sm font-semibold flex items-center gap-2">
+                       <Plus className="h-4 w-4" /> {t('property.uploadContract')}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      <Input 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => setContractFile(e.target.files?.[0] || null)}
+                      />
+                      <Button 
+                        disabled={!contractFile || uploadingContract} 
+                        onClick={() => handleContractUpload(selectedAuction.propertyId)}
+                      >
+                        {uploadingContract ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common.upload')}
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
             )}

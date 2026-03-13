@@ -33,6 +33,7 @@ CREATE TABLE properties (
   location VARCHAR(255),
   starting_auction_price DECIMAL(12,2),
   rental_contract_pdf VARCHAR(500),
+  image_url VARCHAR(500),
   created_at TIMESTAMP DEFAULT NOW()
 );
 

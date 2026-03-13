@@ -19,6 +19,7 @@ const propertySchema = z.object({
   location: z.string().max(255).optional(),
   startingAuctionPrice: z.coerce.number().positive().optional(),
   cahierPrice: z.coerce.number().min(0).optional(),
+  imageUrl: z.string().max(500).optional(),
 });
 
 const auctionSchema = z.object({
@@ -76,7 +77,7 @@ const adminCreateUserSchema = z.object({
 
 const documentUploadSchema = z.object({
   documentType: z
-    .enum(["RESIDENCE_CERTIFICATE", "BIRTH_CERTIFICATE"])
+    .enum(["RESIDENCE_CERTIFICATE", "BIRTH_CERTIFICATE", "TAX_CLEARANCE_CERTIFICATE", "TAX_ID_NUMBER"])
     .default("RESIDENCE_CERTIFICATE"),
 });
 

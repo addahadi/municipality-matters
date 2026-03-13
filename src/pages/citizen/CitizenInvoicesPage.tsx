@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { paymentSchema } from '@/lib/validations';
 import { invoicesApi } from '@/services/api';
+import DahabiaPaymentDialog from '@/components/payment/DahabiaPaymentDialog';
 import { CreditCard, Loader2, Search } from 'lucide-react';
 
 const CitizenInvoicesPage = () => {
@@ -24,13 +25,19 @@ const CitizenInvoicesPage = () => {
   const [paying, setPaying] = useState(false);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const { errors, validate, clearErrors, clearFieldError } = useFormValidation(paymentSchema);
 
   const fetchData = () => { setLoading(true); invoicesApi.getAll().then(r => setInvoices(r.data)).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => { fetchData(); }, []);
 
   const handlePay = async () => {
+    setPaymentDialogOpen(true);
+  };
+
+  const processPayment = async () => {
     if (!payDialog || !validate({ amount })) return;
+    setPaymentDialogOpen(false);
     setPaying(true);
     try {
       await invoicesApi.pay({ invoiceId: payDialog.id, amount: parseFloat(amount) });
@@ -107,25 +114,12 @@ const CitizenInvoicesPage = () => {
           </CardContent>
         </Card>
 
-        <Dialog open={!!payDialog} onOpenChange={o => { if (!o) { setPayDialog(null); clearErrors(); } }}>
-          <DialogContent>
-            <DialogHeader><DialogTitle>{t('invoices.payEdahabia')}</DialogTitle></DialogHeader>
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg bg-muted text-center">
-                <p className="text-sm text-muted-foreground">{t('invoices.remaining')}</p>
-                <p className="text-2xl font-bold text-foreground">{payDialog?.remainingAmount} DA</p>
-              </div>
-              <div className="p-4 rounded-lg border-2 border-primary/20 bg-primary/5">
-                <div className="flex items-center gap-2 mb-2"><CreditCard className="h-5 w-5 text-primary" /><span className="font-semibold text-foreground">Edahabia</span></div>
-                <p className="text-xs text-muted-foreground">{t('invoices.edahabiaSimulation')}</p>
-              </div>
-              <FormFieldWrapper label={t('invoices.paymentAmount')} error={errors.amount} required>
-                <Input type="number" value={amount} onChange={e => { setAmount(e.target.value); clearFieldError('amount'); }} className={errors.amount ? 'border-destructive' : ''} />
-              </FormFieldWrapper>
-              <Button onClick={handlePay} disabled={paying} className="w-full">{paying ? <Loader2 className="h-4 w-4 animate-spin" /> : t('invoices.confirmPayment')}</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <DahabiaPaymentDialog
+          open={paymentDialogOpen}
+          onOpenChange={setPaymentDialogOpen}
+          amount={parseFloat(amount) || 0}
+          onSuccess={processPayment}
+        />
       </div>
     </DashboardLayout>
   );

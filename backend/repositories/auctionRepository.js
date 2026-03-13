@@ -7,6 +7,7 @@ const auctionRepository = {
        a.start_date AS "startDate", a.end_date AS "endDate", a.status,
        a.starting_price AS "startingPrice", a.final_price AS "finalPrice", 
        COALESCE((SELECT MAX(amount) FROM bids WHERE auction_id = a.id), a.starting_price) AS "currentPrice",
+       p.image_url AS "propertyImage",
        a.created_at AS "createdAt"
        FROM auctions a JOIN properties p ON a.property_id = p.id ORDER BY a.created_at DESC`
     );
@@ -56,6 +57,14 @@ const auctionRepository = {
       [auctionId, citizenId, amount]
     );
     return rows[0];
+  },
+
+  async getWinner(auctionId) {
+    const { rows } = await pool.query(
+      `SELECT citizen_id FROM bids WHERE auction_id = $1 ORDER BY amount DESC LIMIT 1`,
+      [auctionId]
+    );
+    return rows[0]?.citizen_id || null;
   },
 };
 

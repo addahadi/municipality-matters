@@ -64,6 +64,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { to: "/citizen/reviews", icon: Star, label: t("nav.reviews") },
     { to: "/citizen/announcements", icon: Megaphone, label: t("nav.announcements") },
     { to: "/citizen/invoices", icon: FileText, label: t("nav.invoices") },
+    { to: "/citizen/rentals", icon: Building2, label: t("nav.myRentals") },
     { to: "/citizen/documents", icon: FolderOpen, label: t("nav.documents") },
   ];
 

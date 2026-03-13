@@ -31,6 +31,7 @@ import CitizenAnnouncementsPage from "@/pages/citizen/CitizenAnnouncementsPage";
 import CitizenInvoicesPage from "@/pages/citizen/CitizenInvoicesPage";
 import CitizenDocumentsPage from "@/pages/citizen/CitizenDocumentsPage";
 import CitizenAuctionsPage from "@/pages/citizen/CitizenAuctionsPage";
+import CitizenRentalsPage from "@/pages/citizen/CitizenRentalsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,7 @@ const App = () => (
             <Route path="/citizen/reviews" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenReviewsPage /></ProtectedRoute>} />
             <Route path="/citizen/announcements" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenAnnouncementsPage /></ProtectedRoute>} />
             <Route path="/citizen/invoices" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenInvoicesPage /></ProtectedRoute>} />
+            <Route path="/citizen/rentals" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenRentalsPage /></ProtectedRoute>} />
             <Route path="/citizen/documents" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenDocumentsPage /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />

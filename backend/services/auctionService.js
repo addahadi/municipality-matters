@@ -25,7 +25,11 @@ const auctionService = {
     const highest = await auctionRepository.getHighestBid(auctionId);
     const auction = await auctionRepository.close(auctionId, highest || 0);
     if (auction) {
-      await propertyRepository.update(auction.property_id, { status: 'RENTED' });
+      const winnerId = await auctionRepository.getWinner(auctionId);
+      await propertyRepository.update(auction.property_id, { 
+        status: 'RENTED',
+        tenantId: winnerId 
+      });
     }
     return auction;
   },

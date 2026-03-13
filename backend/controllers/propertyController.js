@@ -43,7 +43,16 @@ const propertyController = {
         );
         data.rentalContractPDF = uploadResult.secure_url;
       }
-
+      
+      if (req.files?.propertyImage?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.propertyImage[0],
+          "image",
+          "municipality/properties/images",
+        );
+        data.imageUrl = uploadResult.secure_url;
+      }
+      
       const property = await propertyService.create(data);
       res.status(201).json(property);
     } catch (err) {
@@ -72,7 +81,16 @@ const propertyController = {
         );
         data.rentalContractPDF = uploadResult.secure_url;
       }
-
+      
+      if (req.files?.propertyImage?.[0]) {
+        const uploadResult = await uploadToCloudinary(
+          req.files.propertyImage[0],
+          "image",
+          "municipality/properties/images",
+        );
+        data.imageUrl = uploadResult.secure_url;
+      }
+      
       const property = await propertyService.update(req.params.id, data);
       res.json(property);
     } catch (err) {
@@ -163,6 +181,14 @@ const propertyController = {
         req.user.id,
       );
       res.json(purchases);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  async getMyRentals(req, res) {
+    try {
+      const rentals = await propertyService.getByTenant(req.user.id);
+      res.json(rentals);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

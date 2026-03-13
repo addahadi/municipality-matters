@@ -44,6 +44,7 @@ interface Property {
   status: PropertyStatus;
   cahierPrice: number;
   startingAuctionPrice: number;
+  imageUrl?: string;
   createdAt: string;
 }
 
@@ -65,6 +66,7 @@ const PropertiesPage = () => {
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [saving, setSaving] = useState(false);
   const [cahierFile, setCahierFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     title: "",
     location: "",
@@ -98,6 +100,12 @@ const PropertiesPage = () => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate(form)) return;
@@ -108,6 +116,9 @@ const PropertiesPage = () => {
     );
     if (cahierFile) {
       formData.append("cahierDeChargePDF", cahierFile);
+    }
+    if (imageFile) {
+      formData.append("propertyImage", imageFile);
     }
     try {
       if (editingProperty) {
@@ -170,6 +181,7 @@ const PropertiesPage = () => {
       startingAuctionPrice: String(property.startingAuctionPrice),
     });
     setCahierFile(null);
+    setImageFile(null);
     clearErrors();
     setDialogOpen(true);
   };
@@ -184,6 +196,7 @@ const PropertiesPage = () => {
       startingAuctionPrice: "",
     });
     setCahierFile(null);
+    setImageFile(null);
     clearErrors();
   };
 
@@ -326,6 +339,19 @@ const PropertiesPage = () => {
                       </p>
                     )}
                   </FormFieldWrapper>
+                  <FormFieldWrapper label={t("property.image")}>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="cursor-pointer"
+                    />
+                    {imageFile && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t("common.selected")}: {imageFile.name}
+                      </p>
+                    )}
+                  </FormFieldWrapper>
                 </div>
                 <div className="flex gap-2 justify-end pt-2">
                   <Button
@@ -385,6 +411,7 @@ const PropertiesPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[80px]">{t("property.image")}</TableHead>
                     <TableHead>{t("property.name")}</TableHead>
                     <TableHead>{t("property.location")}</TableHead>
                     <TableHead>{t("property.superficie")}</TableHead>
@@ -397,7 +424,7 @@ const PropertiesPage = () => {
                   {filtered.length === 0 ? (
                     <TableRow>
                       <TableCell
-                        colSpan={6}
+                        colSpan={7}
                         className="text-center text-muted-foreground py-12"
                       >
                         {t("common.noData")}
@@ -409,6 +436,19 @@ const PropertiesPage = () => {
                         key={p.id}
                         className="hover:bg-muted/50 transition-colors"
                       >
+                        <TableCell>
+                          {p.imageUrl ? (
+                            <img
+                              src={p.imageUrl}
+                              alt={p.title}
+                              className="h-10 w-10 object-cover rounded shadow-sm"
+                            />
+                          ) : (
+                            <div className="h-10 w-10 bg-muted flex items-center justify-center rounded text-muted-foreground text-[10px] text-center p-1 leading-tight">
+                              {t("property.noImage")}
+                            </div>
+                          )}
+                        </TableCell>
                         <TableCell className="font-medium">{p.title}</TableCell>
                         <TableCell>{p.location}</TableCell>
                         <TableCell>{p.superficie} m²</TableCell>
@@ -466,6 +506,15 @@ const PropertiesPage = () => {
             </DialogHeader>
             {viewingProperty && (
               <div className="space-y-4">
+                {viewingProperty.imageUrl && (
+                  <div className="aspect-video w-full overflow-hidden rounded-lg border shadow-sm">
+                    <img
+                      src={viewingProperty.imageUrl}
+                      alt={viewingProperty.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div>
                     <span className="font-medium text-muted-foreground">{t("property.name")}:</span>

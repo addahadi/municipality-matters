@@ -47,6 +47,7 @@ export const propertiesApi = {
   getCahier: (id: string) => api.get(`/properties/${id}/cahier`),
   purchaseCahier: (id: string) => api.post(`/properties/${id}/purchase-cahier`),
   getMyPurchases: () => api.get("/properties/my-cahier-purchases"),
+  getMyRentals: () => api.get("/properties/my-rentals"),
   create: (data: FormData) =>
     api.post("/properties", data, {
       headers: { "Content-Type": "multipart/form-data" },

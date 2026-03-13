@@ -22,6 +22,7 @@ import {
 import FormFieldWrapper from "@/components/ui/form-field";
 import { propertiesApi, invoicesApi } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
+import DahabiaPaymentDialog from "@/components/payment/DahabiaPaymentDialog";
 import {
   Search,
   MapPin,
@@ -41,6 +42,7 @@ interface Property {
   status: PropertyStatus;
   cahierPrice: number;
   startingAuctionPrice: number;
+  imageUrl?: string;
 }
 
 const statusColors: Record<PropertyStatus, string> = {
@@ -61,6 +63,7 @@ const CitizenPropertiesPage = () => {
   );
   const [paidCahiers, setPaidCahiers] = useState<Set<string>>(new Set());
   const [purchasing, setPurchasing] = useState(false);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
 
   useEffect(() => {
     propertiesApi
@@ -70,27 +73,33 @@ const CitizenPropertiesPage = () => {
   }, []);
 
   const handlePurchaseCahier = async (property: Property) => {
+    setPaymentDialogOpen(true);
+  };
+
+  const processPayment = async () => {
+    if (!selectedProperty) return;
+    setPaymentDialogOpen(false);
     setPurchasing(true);
     try {
       // Step 1: Create invoice
       const invoiceRes = await invoicesApi.create({
-        total: property.cahierPrice,
+        total: selectedProperty.cahierPrice,
       });
 
       // Step 2: Pay the full invoice
       await invoicesApi.pay({
         invoiceId: invoiceRes.data.id,
-        amount: property.cahierPrice,
+        amount: selectedProperty.cahierPrice,
       });
 
       // Step 3: Record cahier purchase
-      const purchaseRes = await propertiesApi.purchaseCahier(property.id);
+      const purchaseRes = await propertiesApi.purchaseCahier(selectedProperty.id);
       console.log("Purchase response:", purchaseRes.data);
 
       // Step 4: Verify purchase was recorded by fetching it
       const myPurchases = await propertiesApi.getMyPurchases();
       const purchased = myPurchases.data.some(
-        (p: any) => p.propertyId === property.id,
+        (p: any) => p.propertyId === selectedProperty.id,
       );
 
       if (!purchased) {
@@ -98,7 +107,7 @@ const CitizenPropertiesPage = () => {
       }
 
       toast({ title: t("property.purchased"), variant: "success" as any });
-      setPaidCahiers((prev) => new Set(prev).add(property.id));
+      setPaidCahiers((prev) => new Set(prev).add(selectedProperty.id));
       setPurchaseDialogOpen(false);
     } catch (err: any) {
       console.error("Purchase error:", err);
@@ -183,8 +192,21 @@ const CitizenPropertiesPage = () => {
             {filtered.map((p) => (
               <Card
                 key={p.id}
-                className="hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+                className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               >
+                {p.imageUrl ? (
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img
+                      src={p.imageUrl}
+                      alt={p.title}
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-video w-full bg-muted flex items-center justify-center text-muted-foreground italic">
+                    {t("property.noImage")}
+                  </div>
+                )}
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start gap-2">
                     <CardTitle className="text-lg leading-snug">
@@ -293,6 +315,13 @@ const CitizenPropertiesPage = () => {
             )}
           </DialogContent>
         </Dialog>
+
+        <DahabiaPaymentDialog
+          open={paymentDialogOpen}
+          onOpenChange={setPaymentDialogOpen}
+          amount={selectedProperty?.cahierPrice || 0}
+          onSuccess={processPayment}
+        />
       </div>
     </DashboardLayout>
   );

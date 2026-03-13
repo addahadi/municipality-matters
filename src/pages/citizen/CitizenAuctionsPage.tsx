@@ -28,6 +28,7 @@ interface Auction {
   startingPrice: number;
   currentPrice: number;
   status: string;
+  propertyImage?: string;
 }
 
 const CitizenAuctionsPage = () => {
@@ -122,8 +123,21 @@ const CitizenAuctionsPage = () => {
             {filtered.map((auction) => (
               <Card
                 key={auction.id}
-                className="hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+                className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               >
+                {auction.propertyImage ? (
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img
+                      src={auction.propertyImage}
+                      alt={auction.propertyTitle}
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="aspect-video w-full bg-muted flex items-center justify-center text-muted-foreground italic">
+                    {t("property.noImage")}
+                  </div>
+                )}
                 <CardHeader className="pb-3">
                   <div className="flex justify-between items-start gap-2">
                     <CardTitle className="text-lg leading-snug">
@@ -140,7 +154,7 @@ const CitizenAuctionsPage = () => {
                       <Calendar className="h-4 w-4 shrink-0" />
                       <span>
                         {t("auctions.endsOn")}:{" "}
-                        {new Date(auction.endDate).toLocaleDateString()}
+                        {new Date(auction.endDate).toLocaleString()}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
@@ -202,8 +216,6 @@ const CitizenAuctionsPage = () => {
                         >
                           <Input
                             type="number"
-                            step="0.01"
-                            min={auction.currentPrice + 1}
                             value={bidAmount}
                             onChange={(e) => {
                               setBidAmount(e.target.value);
