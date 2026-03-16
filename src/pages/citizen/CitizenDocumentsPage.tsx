@@ -179,22 +179,31 @@ const CitizenDocumentsPage = () => {
           <h1 className="text-2xl font-bold text-foreground">
             {t("nav.documents")}
           </h1>
-          <Dialog
-            open={dialogOpen}
-            onOpenChange={(o) => {
-              setDialogOpen(o);
-              if (!o) {
-                setSelectedFile(null);
-                setDocumentType("RESIDENCE_CERTIFICATE");
-              }
-            }}
-          >
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                {t("documents.add")}
-              </Button>
-            </DialogTrigger>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => window.open("https://etatcivil.interieur.gov.dz/", "_blank")}
+            >
+              <FileText className="h-4 w-4" />
+              {t("documents.getExternal")}
+            </Button>
+            <Dialog
+              open={dialogOpen}
+              onOpenChange={(o) => {
+                setDialogOpen(o);
+                if (!o) {
+                  setSelectedFile(null);
+                  setDocumentType("RESIDENCE_CERTIFICATE");
+                }
+              }}
+            >
+              <DialogTrigger asChild>
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  {t("documents.add")}
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{t("documents.add")}</DialogTitle>
@@ -240,6 +249,7 @@ const CitizenDocumentsPage = () => {
               </div>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
         <Card>
           <CardContent className="p-0">
