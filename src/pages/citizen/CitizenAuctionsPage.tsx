@@ -17,7 +17,8 @@ import { auctionsApi } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { bidSchema } from "@/lib/validations";
-import { Search, Gavel, Calendar, DollarSign, Loader2 } from "lucide-react";
+import { Search, Gavel, Calendar, DollarSign, Loader2, Clock } from "lucide-react";
+import CountdownTimer from "@/components/ui/countdown-timer";
 
 interface Auction {
   id: string;
@@ -149,27 +150,24 @@ const CitizenAuctionsPage = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="h-4 w-4 shrink-0" />
-                      <span>
-                        {t("auctions.endsOn")}:{" "}
-                        {new Date(auction.endDate).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <DollarSign className="h-4 w-4 shrink-0" />
-                      <span>
-                        {t("auctions.startingPrice")}: {auction.startingPrice}{" "}
-                        DA
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-primary font-semibold">
-                      <DollarSign className="h-4 w-4 shrink-0" />
-                      <span>
-                        {t("auctions.currentBid")}: {auction.currentPrice}{" "}
-                        DA
-                      </span>
+                  <div className="space-y-4 text-sm mt-2">
+                    <CountdownTimer endDate={auction.endDate} />
+                    
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/50">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <DollarSign className="h-3 w-3" />
+                          {t("auctions.startingPrice")}
+                        </span>
+                        <span className="font-medium">{auction.startingPrice} DA</span>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1 text-primary">
+                          <DollarSign className="h-3 w-3" />
+                          {t("auctions.currentBid")}
+                        </span>
+                        <span className="font-bold text-primary">{auction.currentPrice} DA</span>
+                      </div>
                     </div>
                   </div>
                   <Dialog

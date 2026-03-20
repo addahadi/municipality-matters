@@ -16,6 +16,7 @@ import { useFormValidation } from '@/hooks/useFormValidation';
 import { auctionSchema } from '@/lib/validations';
 import { auctionsApi, propertiesApi } from '@/services/api';
 import { Plus, XCircle, Loader2, Search, Eye, Users, TrendingUp, Trophy, Calendar, History } from 'lucide-react';
+import CountdownTimer from '@/components/ui/countdown-timer';
 
 interface Bid {
   id: string;
@@ -345,6 +346,11 @@ const AuctionsPage = () => {
                       </span>
                       <span>{new Date(selectedAuction.endDate).toLocaleString()}</span>
                     </div>
+                    {selectedAuction.status === 'OPEN' && (
+                      <div className="flex justify-between items-center py-2">
+                        <CountdownTimer endDate={selectedAuction.endDate} />
+                      </div>
+                    )}
                     <Separator />
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">{t('common.status')}</span>

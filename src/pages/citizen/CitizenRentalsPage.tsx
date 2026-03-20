@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { propertiesApi } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
+import DahabiaPaymentDialog from "@/components/payment/DahabiaPaymentDialog";
 
 interface Property {
   id: string;
@@ -30,12 +31,17 @@ interface Property {
   status: string;
   rentalContractPDF: string | null;
   imageUrl: string | null;
+  registrationFeesPaid?: boolean;
+  guaranteesPaid?: boolean;
 }
 
 const CitizenRentalsPage = () => {
   const { t } = useTranslation();
   const [rentals, setRentals] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<{ id: string; type: "registration" | "guarantees" } | null>(null);
+
 
   useEffect(() => {
     fetchRentals();
@@ -59,6 +65,31 @@ const CitizenRentalsPage = () => {
   const handleDownloadContract = (url: string) => {
     window.open(url, "_blank");
   };
+
+  const openPaymentDialog = (id: string, type: "registration" | "guarantees") => {
+    setSelectedPayment({ id, type });
+    setPaymentDialogOpen(true);
+  };
+
+  const handlePaymentSuccess = async () => {
+    if (!selectedPayment) return;
+    try {
+      if (selectedPayment.type === "registration") {
+        await propertiesApi.payRegistrationFees(selectedPayment.id);
+        toast({ title: t("property.registrationFeesPaid"), variant: "success" as any });
+      } else {
+        await propertiesApi.payGuarantees(selectedPayment.id);
+        toast({ title: t("property.guaranteesPaid"), variant: "success" as any });
+      }
+      setPaymentDialogOpen(false);
+      setSelectedPayment(null);
+      fetchRentals();
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast({ title: t("common.error"), variant: "destructive" });
+    }
+  };
+
 
   return (
     <DashboardLayout>
@@ -125,7 +156,32 @@ const CitizenRentalsPage = () => {
                   </div>
 
                   <div className="pt-2 border-t border-border/50">
-                    {property.rentalContractPDF ? (
+                    {!property.registrationFeesPaid || !property.guaranteesPaid ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 mb-3 text-warning font-medium">
+                          <AlertCircle className="h-4 w-4" />
+                          {t("property.pendingPayments")}
+                        </div>
+                        {!property.registrationFeesPaid && (
+                          <Button
+                            className="w-full"
+                            variant="default"
+                            onClick={() => openPaymentDialog(property.id, "registration")}
+                          >
+                            {t("property.payRegistrationFees")}
+                          </Button>
+                        )}
+                        {!property.guaranteesPaid && (
+                          <Button
+                            className="w-full"
+                            variant="secondary"
+                            onClick={() => openPaymentDialog(property.id, "guarantees")}
+                          >
+                            {t("property.payGuarantees")}
+                          </Button>
+                        )}
+                      </div>
+                    ) : property.rentalContractPDF ? (
                       <Button
                         className="w-full gap-2 shadow-sm"
                         onClick={() => handleDownloadContract(property.rentalContractPDF!)}
@@ -146,6 +202,18 @@ const CitizenRentalsPage = () => {
           </div>
         )}
       </div>
+
+      <DahabiaPaymentDialog
+        open={paymentDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPaymentDialogOpen(false);
+            setSelectedPayment(null);
+          }
+        }}
+        onSuccess={handlePaymentSuccess}
+        amount={selectedPayment?.type === "registration" ? 5000 : 15000}
+      />
     </DashboardLayout>
   );
 };

@@ -37,6 +37,18 @@ router.post(
   role("CITIZEN"),
   propertyController.purchaseCahier,
 );
+router.post(
+  "/:id/pay-registration-fees",
+  auth,
+  role("CITIZEN"),
+  propertyController.payRegistrationFees,
+);
+router.post(
+  "/:id/pay-guarantees",
+  auth,
+  role("CITIZEN"),
+  propertyController.payGuarantees,
+);
 router.get("/:id/cahier", auth, propertyController.getCahier);
 router.get("/:id", auth, propertyController.getById);
 router.post(

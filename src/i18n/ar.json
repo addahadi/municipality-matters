@@ -84,7 +84,12 @@
     "saveError": "فشل في حفظ الممتلك",
     "deleteError": "فشل في حذف الممتلك",
     "purchased": "تم شراء دفتر الشروط بنجاح",
-    "purchaseError": "فشل في شراء دفتر الشروط"
+    "purchaseError": "فشل في شراء دفتر الشروط",
+    "registrationFeesPaid": "تم دفع حقوق التسجيل بنجاح",
+    "guaranteesPaid": "تم دفع الضمانات بنجاح",
+    "pendingPayments": "مطلوب دفع المستحقات",
+    "payRegistrationFees": "دفع حقوق التسجيل",
+    "payGuarantees": "دفع الضمانات"
   },
   "dashboard": {
     "welcome": "مرحباً بعودتك",
@@ -122,7 +127,9 @@
     "bidder": "المزايد",
     "bidAmount": "مبلغ العرض",
     "bidDate": "التاريخ",
-    "winner": "الفائز"
+    "winner": "الفائز",
+    "countdown": "الوقت المتبقي",
+    "ended": "انتهى المزاد"
   },
   "invoices": {
     "citizen": "المواطن",
@@ -344,5 +351,11 @@
     "ctaSubtitle": "انضم إلى آلاف المواطنين الذين يستخدمون منصتنا لخدمات بلدية سلسة.",
     "ctaButton": "أنشئ حسابك",
     "footerRights": "جميع الحقوق محفوظة."
+  },
+  "time": {
+    "days": "يوم",
+    "hours": "ساعة",
+    "minutes": "دقيقة",
+    "seconds": "ثانية"
   }
 }

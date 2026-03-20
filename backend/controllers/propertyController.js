@@ -193,6 +193,40 @@ const propertyController = {
       res.status(500).json({ error: err.message });
     }
   },
+
+  async payRegistrationFees(req, res) {
+    try {
+      const property = await propertyService.getById(req.params.id);
+      if (!property) return res.status(404).json({ error: "Property not found" });
+      if (property.tenantId !== req.user.id) {
+        return res.status(403).json({ error: "Access denied: Not the tenant" });
+      }
+
+      const updated = await propertyService.update(req.params.id, {
+        registrationFeesPaid: true,
+      });
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  async payGuarantees(req, res) {
+    try {
+      const property = await propertyService.getById(req.params.id);
+      if (!property) return res.status(404).json({ error: "Property not found" });
+      if (property.tenantId !== req.user.id) {
+        return res.status(403).json({ error: "Access denied: Not the tenant" });
+      }
+
+      const updated = await propertyService.update(req.params.id, {
+        guaranteesPaid: true,
+      });
+      res.json(updated);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 };
 
 module.exports = propertyController;

@@ -84,7 +84,12 @@
     "saveError": "Failed to save property",
     "deleteError": "Failed to delete property",
     "purchased": "Specifications purchased successfully",
-    "purchaseError": "Failed to purchase specifications"
+    "purchaseError": "Failed to purchase specifications",
+    "registrationFeesPaid": "Registration fees paid successfully",
+    "guaranteesPaid": "Guarantees paid successfully",
+    "pendingPayments": "Pending Payments Required",
+    "payRegistrationFees": "Pay Registration Fees",
+    "payGuarantees": "Pay Guarantees"
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -122,7 +127,9 @@
     "bidder": "Bidder",
     "bidAmount": "Bid Amount",
     "bidDate": "Date",
-    "winner": "Winner"
+    "winner": "Winner",
+    "countdown": "Time Remaining",
+    "ended": "Ended"
   },
   "invoices": {
     "citizen": "Citizen",
@@ -344,5 +351,11 @@
     "ctaSubtitle": "Join thousands of citizens using our platform for seamless municipal services.",
     "ctaButton": "Create Your Account",
     "footerRights": "All rights reserved."
+  },
+  "time": {
+    "days": "D",
+    "hours": "H",
+    "minutes": "M",
+    "seconds": "S"
   }
 }
