@@ -1,6 +1,17 @@
 const pool = require("../config/database");
 
 const citizenDocumentRepository = {
+  async findAll() {
+    const { rows } = await pool.query(
+      `SELECT cd.id, cd.file_path AS "filePath", cd.document_type AS "documentType", cd.created_at AS "createdAt",
+       cd.citizen_id AS "citizenId", u.username AS "citizenName"
+       FROM citizen_documents cd
+       LEFT JOIN users u ON u.id = cd.citizen_id
+       ORDER BY cd.created_at DESC`,
+    );
+    return rows;
+  },
+
   async findByCitizen(citizenId) {
     const { rows } = await pool.query(
       'SELECT id, file_path AS "filePath", document_type AS "documentType", created_at AS "createdAt" FROM citizen_documents WHERE citizen_id = $1 ORDER BY created_at DESC',

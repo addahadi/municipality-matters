@@ -53,6 +53,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { to: "/employee/reviews", icon: Star, label: t("nav.reviews") },
     { to: "/employee/announcements", icon: Megaphone, label: t("nav.announcements") },
     { to: "/employee/messages", icon: MessageSquare, label: t("nav.messages") },
+    { to: "/employee/documents", icon: FolderOpen, label: t("nav.documents") },
   ];
 
   const citizenNav = [

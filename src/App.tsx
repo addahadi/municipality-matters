@@ -22,6 +22,7 @@ import ComplaintsPage from "@/pages/employee/ComplaintsPage";
 import ReviewsPage from "@/pages/employee/ReviewsPage";
 import AnnouncementsPage from "@/pages/employee/AnnouncementsPage";
 import MessagesPage from "@/pages/employee/MessagesPage";
+import EmployeeDocumentsPage from "@/pages/employee/EmployeeDocumentsPage";
 import CitizenDashboard from "@/pages/citizen/CitizenDashboard";
 import CitizenPropertiesPage from "@/pages/citizen/CitizenPropertiesPage";
 import CitizenRequestsPage from "@/pages/citizen/CitizenRequestsPage";
@@ -64,6 +65,7 @@ const App = () => (
             <Route path="/employee/reviews" element={<ProtectedRoute allowedRoles={['EMPLOYEE']}><ReviewsPage /></ProtectedRoute>} />
             <Route path="/employee/announcements" element={<ProtectedRoute allowedRoles={['EMPLOYEE']}><AnnouncementsPage /></ProtectedRoute>} />
             <Route path="/employee/messages" element={<ProtectedRoute allowedRoles={['EMPLOYEE']}><MessagesPage /></ProtectedRoute>} />
+            <Route path="/employee/documents" element={<ProtectedRoute allowedRoles={['EMPLOYEE']}><EmployeeDocumentsPage /></ProtectedRoute>} />
 
             {/* Citizen */}
             <Route path="/citizen" element={<ProtectedRoute allowedRoles={['CITIZEN']}><CitizenDashboard /></ProtectedRoute>} />

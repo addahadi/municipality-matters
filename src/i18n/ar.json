@@ -249,7 +249,12 @@
     "deleteError": "فشل حذف الوثيقة",
     "deleteTitle": "حذف الوثيقة",
     "deleteMessage": "هل تريد فعلاً حذف هذه الوثيقة؟ لا يمكن التراجع عن هذا الإجراء.",
-    "getExternal": "طلب وثائق الحالة المدنية"
+    "getExternal": "طلب وثائق الحالة المدنية",
+    "citizenDocuments": "وثائق المواطنين",
+    "citizen": "المواطن",
+    "total": "وثيقة",
+    "filterByType": "تصفية حسب النوع",
+    "allTypes": "جميع الأنواع"
   },
   "common": {
     "save": "حفظ",

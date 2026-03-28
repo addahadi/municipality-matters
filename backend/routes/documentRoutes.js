@@ -12,6 +12,7 @@ const upload = multer({
 });
 
 router.get("/", auth, role("CITIZEN"), documentController.getByCitizen);
+router.get("/all", auth, role("EMPLOYEE"), documentController.getAll);
 router.post(
   "/",
   auth,
@@ -19,7 +20,7 @@ router.post(
   upload.single("file"),
   documentController.upload,
 );
-router.get("/:id/download", auth, role("CITIZEN"), documentController.download);
+router.get("/:id/download", auth, role("CITIZEN", "EMPLOYEE"), documentController.download);
 router.put("/:id", auth, role("CITIZEN"), documentController.update);
 router.delete("/:id", auth, role("CITIZEN"), documentController.delete);
 

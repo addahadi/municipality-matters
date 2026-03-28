@@ -134,6 +134,7 @@ export const usersApi = {
 // Documents
 export const documentsApi = {
   getAll: () => api.get("/documents"),
+  getAllForEmployee: () => api.get("/documents/all"),
   upload: (data: FormData) =>
     api.post("/documents", data, {
       headers: { "Content-Type": "multipart/form-data" },

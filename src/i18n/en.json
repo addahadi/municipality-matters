@@ -249,7 +249,12 @@
     "deleteError": "Failed to delete document",
     "deleteTitle": "Delete Document",
     "deleteMessage": "Are you sure you want to delete this document? This action cannot be undone.",
-    "getExternal": "Get Civil Documents"
+    "getExternal": "Get Civil Documents",
+    "citizenDocuments": "Citizen Documents",
+    "citizen": "Citizen",
+    "total": "documents",
+    "filterByType": "Filter by type",
+    "allTypes": "All Types"
   },
   "common": {
     "save": "Save",

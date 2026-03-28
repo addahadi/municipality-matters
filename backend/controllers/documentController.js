@@ -5,6 +5,14 @@ const {
 } = require("../utils/cloudinaryUpload");
 
 const documentController = {
+  async getAll(req, res) {
+    try {
+      res.json(await citizenDocumentRepository.findAll());
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
   async getByCitizen(req, res) {
     try {
       res.json(await citizenDocumentRepository.findByCitizen(req.user.id));
@@ -37,9 +45,12 @@ const documentController = {
 
   async download(req, res) {
     try {
-      const docs = await citizenDocumentRepository.findByCitizen(req.user.id);
-      const doc = docs.find((d) => d.id === req.params.id);
+      const doc = await citizenDocumentRepository.findById(req.params.id);
       if (!doc) return res.status(404).json({ error: "Document not found" });
+      // For citizens, verify they own the document
+      if (req.user.role === "CITIZEN" && doc.citizenId !== req.user.id) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
       // Redirect to Cloudinary URL
       res.redirect(doc.filePath);
     } catch (err) {
