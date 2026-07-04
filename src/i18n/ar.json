@@ -355,7 +355,13 @@
     "ctaTitle": "هل أنت مستعد للبدء؟",
     "ctaSubtitle": "انضم إلى آلاف المواطنين الذين يستخدمون منصتنا لخدمات بلدية سلسة.",
     "ctaButton": "أنشئ حسابك",
-    "footerRights": "جميع الحقوق محفوظة."
+    "footerRights": "جميع الحقوق محفوظة.",
+    "kickerFeatures": "ميزات المنصة",
+    "kickerRoles": "لمن هذه المنصة",
+    "kickerCta": "ابدأ اليوم",
+    "trustSecure": "آمن ومشفر",
+    "trustFast": "سريع فائق",
+    "trustImproving": "تحسين مستمر"
   },
   "time": {
     "days": "يوم",

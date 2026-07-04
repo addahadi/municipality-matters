@@ -36,6 +36,25 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
   return <span ref={ref}>{display.toLocaleString()}{suffix}</span>;
 }
 
+/* Two-tone brand palette used consistently across cards — full class
+   strings so Tailwind's JIT scanner can pick them up. */
+const TINTS = [
+  {
+    blob: "from-primary/15 to-primary/0",
+    badge: "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30",
+  },
+  {
+    blob: "from-accent/15 to-accent/0",
+    badge: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-accent/30",
+  },
+];
+
+const ROLE_STYLES = [
+  { bar: "from-primary to-primary/70", badge: "from-primary to-primary/70", ring: "ring-primary/20" },
+  { bar: "from-accent to-accent/70", badge: "from-accent to-accent/70", ring: "ring-accent/20" },
+  { bar: "from-primary to-accent", badge: "from-primary to-accent", ring: "ring-primary/15" },
+];
+
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
   const mainRef = useRef<HTMLDivElement>(null);
@@ -115,12 +134,12 @@ const LandingPage = () => {
   }, []);
 
   const features = [
-    { icon: Building2, title: t("landing.featureProperties"), desc: t("landing.featurePropertiesDesc"), color: "from-blue-500/20 to-blue-600/5" },
-    { icon: Gavel,     title: t("landing.featureAuctions"),   desc: t("landing.featureAuctionsDesc"),   color: "from-violet-500/20 to-violet-600/5" },
-    { icon: FileText,  title: t("landing.featureInvoices"),   desc: t("landing.featureInvoicesDesc"),   color: "from-emerald-500/20 to-emerald-600/5" },
-    { icon: ClipboardList, title: t("landing.featureRequests"), desc: t("landing.featureRequestsDesc"), color: "from-orange-500/20 to-orange-600/5" },
-    { icon: Lock,      title: t("landing.featureSecurity"),   desc: t("landing.featureSecurityDesc"),   color: "from-rose-500/20 to-rose-600/5" },
-    { icon: Megaphone, title: t("landing.featureAnnouncements"), desc: t("landing.featureAnnouncementsDesc"), color: "from-cyan-500/20 to-cyan-600/5" },
+    { icon: Building2, title: t("landing.featureProperties"), desc: t("landing.featurePropertiesDesc") },
+    { icon: Gavel, title: t("landing.featureAuctions"), desc: t("landing.featureAuctionsDesc") },
+    { icon: FileText, title: t("landing.featureInvoices"), desc: t("landing.featureInvoicesDesc") },
+    { icon: ClipboardList, title: t("landing.featureRequests"), desc: t("landing.featureRequestsDesc") },
+    { icon: Lock, title: t("landing.featureSecurity"), desc: t("landing.featureSecurityDesc") },
+    { icon: Megaphone, title: t("landing.featureAnnouncements"), desc: t("landing.featureAnnouncementsDesc") },
   ];
 
   const roles = [
@@ -128,35 +147,27 @@ const LandingPage = () => {
       icon: Shield,
       role: t("landing.roleAdmin"),
       items: t("landing.roleAdminItems", { returnObjects: true }) as string[],
-      gradient: "from-violet-600 to-purple-700",
-      ring: "ring-violet-500/20",
     },
     {
       icon: Users,
       role: t("landing.roleEmployee"),
       items: t("landing.roleEmployeeItems", { returnObjects: true }) as string[],
-      gradient: "from-blue-600 to-sky-700",
-      ring: "ring-blue-500/20",
     },
     {
       icon: Building2,
       role: t("landing.roleCitizen"),
       items: t("landing.roleCitizenItems", { returnObjects: true }) as string[],
-      gradient: "from-emerald-600 to-teal-700",
-      ring: "ring-emerald-500/20",
     },
+  ];
+
+  const trustBadges = [
+    { icon: Shield, text: t("landing.trustSecure") },
+    { icon: Zap, text: t("landing.trustFast") },
+    { icon: TrendingUp, text: t("landing.trustImproving") },
   ];
 
   return (
     <div ref={mainRef} className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* ── Diagonal Lines Overlay ── */}
-      <div 
-        className="fixed inset-0 pointer-events-none z-[1] opacity-40"
-        style={{
-          background: `linear-gradient(to top right, transparent calc(50% - 12px), red calc(50% - 12px), red 50%, green 50%, green calc(50% + 12px), transparent calc(50% + 12px))`
-        }}
-      />
-
       {/* ── Navbar ── */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -168,9 +179,8 @@ const LandingPage = () => {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 shadow-lg shadow-primary/30">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/25">
               <Building2 className="h-5 w-5 text-primary-foreground" />
-              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-background" />
             </div>
             <span className="text-lg font-bold tracking-tight">{t("app.title")}</span>
           </div>
@@ -196,7 +206,7 @@ const LandingPage = () => {
         className="relative overflow-hidden py-24 sm:py-36"
         style={{
           backgroundImage: `
-            linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.30) 50%, var(--background, #fff) 100%),
+            linear-gradient(to bottom, hsl(220 45% 6% / 0.82) 0%, hsl(220 45% 8% / 0.62) 45%, hsl(var(--background)) 100%),
             url('/hero-bg.png')
           `,
           backgroundSize: "cover",
@@ -204,35 +214,28 @@ const LandingPage = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Dot grid overlay */}
-        <div
-          className="pointer-events-none absolute inset-0 -z-0 opacity-[0.04]"
-          style={{
-            backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        {/* Color tint */}
-        <div className="pointer-events-none absolute inset-0 -z-0 bg-gradient-to-br from-primary/15 via-transparent to-violet-900/15" />
+        {/* Soft brand glows for depth */}
+        <div className="pointer-events-none absolute -top-24 -left-24 -z-0 h-96 w-96 rounded-full bg-primary/25 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-24 -right-24 -z-0 h-96 w-96 rounded-full bg-accent/20 blur-[120px]" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div data-hero className="mx-auto max-w-4xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-sm font-medium text-primary mb-8 backdrop-blur-sm">
-              <Star className="h-3.5 w-3.5 fill-primary" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white mb-8 backdrop-blur-md">
+              <Star className="h-3.5 w-3.5 fill-white" />
               {t("landing.badge")}
             </div>
 
             {/* Headline */}
             <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl leading-[1.08]">
-              <span className="block text-foreground">{t("landing.heroTitle")}</span>
-              <span className="block mt-2 bg-gradient-to-r from-primary via-violet-500 to-cyan-500 bg-clip-text text-transparent">
+              <span className="block text-white">{t("landing.heroTitle")}</span>
+              <span className="block mt-2 bg-[linear-gradient(to_right,hsl(213_95%_72%),hsl(160_75%_62%))] bg-clip-text text-transparent">
                 {t("app.title")}
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-muted-foreground leading-relaxed lg:text-xl max-w-2xl mx-auto">
+            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-white/75 leading-relaxed lg:text-xl max-w-2xl mx-auto">
               {t("landing.heroSubtitle")}
             </p>
 
@@ -251,7 +254,7 @@ const LandingPage = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto text-base px-8 border-border/60 bg-background/50 backdrop-blur-sm hover:bg-muted/60 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="w-full sm:w-auto text-base px-8 border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 hover:text-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
                 asChild
               >
                 <Link to="/login">{t("landing.signIn")}</Link>
@@ -260,13 +263,9 @@ const LandingPage = () => {
 
             {/* Trust badges */}
             <div className="mt-12 flex items-center justify-center gap-6 flex-wrap">
-              {[
-                { icon: Shield, text: "Secure & Encrypted" },
-                { icon: Zap,    text: "Lightning Fast" },
-                { icon: TrendingUp, text: "Always Improving" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Icon className="h-3.5 w-3.5 text-primary" />
+              {trustBadges.map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-1.5 text-xs text-white/70">
+                  <Icon className="h-3.5 w-3.5 text-white/90" />
                   {text}
                 </div>
               ))}
@@ -277,21 +276,21 @@ const LandingPage = () => {
 
       {/* ── Stats ── */}
       <section data-stats className="relative py-14 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-violet-500/5 to-cyan-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
             {[
               { value: 10000, suffix: "+", label: t("landing.statProperties") },
-              { value: 5000,  suffix: "+", label: t("landing.statCitizens") },
-              { value: 99,    suffix: ".9%", label: t("landing.statUptime") },
-              { value: 24,    suffix: "/7", label: t("landing.statSupport") },
+              { value: 5000, suffix: "+", label: t("landing.statCitizens") },
+              { value: 99, suffix: ".9%", label: t("landing.statUptime") },
+              { value: 24, suffix: "/7", label: t("landing.statSupport") },
             ].map((stat) => (
               <div
                 key={stat.label}
                 data-stat
                 className="group relative rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6 text-center shadow-sm hover:shadow-md hover:border-primary/25 transition-all duration-300"
               >
-                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
+                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   <AnimatedNumber target={stat.value} suffix={stat.suffix} />
                 </p>
                 <p className="mt-2 text-sm font-medium text-muted-foreground">{stat.label}</p>
@@ -306,36 +305,35 @@ const LandingPage = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div data-heading className="text-center mb-16">
             <span className="inline-block rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
-              Platform Features
+              {t("landing.kickerFeatures")}
             </span>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.featuresTitle")}</h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.featuresSubtitle")}</p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => (
-              <div
-                key={f.title}
-                data-feature
-                className="group relative rounded-2xl border border-border/50 bg-card p-6 overflow-hidden cursor-default
-                           hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1
-                           transition-all duration-300"
-              >
-                {/* gradient bg blob */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                <div className="relative z-10">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary
-                                  group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-lg group-hover:shadow-primary/30
-                                  transition-all duration-300">
-                    <f.icon className="h-5 w-5" />
+            {features.map((f, i) => {
+              const tint = TINTS[i % TINTS.length];
+              return (
+                <div
+                  key={f.title}
+                  data-feature
+                  className="group relative rounded-2xl border border-border/50 bg-card p-6 overflow-hidden cursor-default
+                             hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1
+                             transition-all duration-300"
+                >
+                  {/* gradient bg blob */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${tint.blob} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div className="relative z-10">
+                    <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl group-hover:shadow-lg transition-all duration-300 ${tint.badge}`}>
+                      <f.icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
                 </div>
-                {/* Corner accent */}
-                <div className="absolute bottom-0 right-0 h-16 w-16 bg-gradient-to-tl from-primary/8 to-transparent rounded-tl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -346,39 +344,42 @@ const LandingPage = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
           <div data-heading className="text-center mb-16">
             <span className="inline-block rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
-              Who It's For
+              {t("landing.kickerRoles")}
             </span>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.rolesTitle")}</h2>
             <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.rolesSubtitle")}</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            {roles.map((r) => (
-              <div
-                key={r.role}
-                data-role
-                className={`group relative rounded-2xl border bg-card overflow-hidden shadow-sm
-                            ring-1 ${r.ring} hover:ring-2 hover:-translate-y-1 hover:shadow-xl
-                            transition-all duration-300`}
-              >
-                {/* Top gradient bar */}
-                <div className={`h-1.5 w-full bg-gradient-to-r ${r.gradient}`} />
-                <div className="p-7">
-                  <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${r.gradient} shadow-lg text-white`}>
-                    <r.icon className="h-5 w-5" />
+            {roles.map((r, i) => {
+              const style = ROLE_STYLES[i % ROLE_STYLES.length];
+              return (
+                <div
+                  key={r.role}
+                  data-role
+                  className={`group relative rounded-2xl border bg-card overflow-hidden shadow-sm
+                              ring-1 ${style.ring} hover:ring-2 hover:-translate-y-1 hover:shadow-xl
+                              transition-all duration-300`}
+                >
+                  {/* Top gradient bar */}
+                  <div className={`h-1.5 w-full bg-gradient-to-r ${style.bar}`} />
+                  <div className="p-7">
+                    <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${style.badge} shadow-lg text-white`}>
+                      <r.icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-5">{r.role}</h3>
+                    <ul className="space-y-3">
+                      {(Array.isArray(r.items) ? r.items : []).map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
+                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <h3 className="text-xl font-bold mb-5">{r.role}</h3>
-                  <ul className="space-y-3">
-                    {(Array.isArray(r.items) ? r.items : []).map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
-                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -388,13 +389,13 @@ const LandingPage = () => {
         <div data-cta className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden border border-primary/20 shadow-2xl shadow-primary/10">
             {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-violet-500/8 to-cyan-500/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
             <div className="absolute inset-0" style={{
               backgroundImage: "radial-gradient(circle at 70% 50%, hsl(var(--primary)/0.12), transparent 60%)",
             }} />
             <div className="relative z-10 text-center px-8 py-16 sm:px-16 sm:py-20">
               <span className="inline-block rounded-full bg-primary/15 border border-primary/25 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-6">
-                Get Started Today
+                {t("landing.kickerCta")}
               </span>
               <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.ctaTitle")}</h2>
               <p className="mt-5 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.ctaSubtitle")}</p>

@@ -355,7 +355,13 @@
     "ctaTitle": "Ready to Get Started?",
     "ctaSubtitle": "Join thousands of citizens using our platform for seamless municipal services.",
     "ctaButton": "Create Your Account",
-    "footerRights": "All rights reserved."
+    "footerRights": "All rights reserved.",
+    "kickerFeatures": "Platform Features",
+    "kickerRoles": "Who It's For",
+    "kickerCta": "Get Started Today",
+    "trustSecure": "Secure & Encrypted",
+    "trustFast": "Lightning Fast",
+    "trustImproving": "Always Improving"
   },
   "time": {
     "days": "D",
