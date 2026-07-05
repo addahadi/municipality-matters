@@ -123,6 +123,10 @@
     --tw-space-x-reverse: 1;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   /* Refined scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
@@ -183,4 +187,33 @@
     font-weight: 500;
     letter-spacing: 0.01em;
   }
+}
+
+/* Landing page theme — light, navy + teal palette, scoped so the rest of
+   the app (dashboard, auth pages) keeps its own primary/accent tokens. */
+.landing-theme {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  --primary: 173 80% 32%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 173 45% 95%;
+  --secondary-foreground: 173 80% 22%;
+
+  --muted: 210 25% 96%;
+  --muted-foreground: 220 10% 45%;
+
+  --accent: 222 47% 16%;
+  --accent-foreground: 0 0% 100%;
+
+  --border: 210 20% 90%;
+  --input: 210 20% 88%;
+  --ring: 173 80% 32%;
 }

@@ -3,14 +3,17 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Building2, Gavel, FileText, Shield, Users, Globe,
   ClipboardList, Megaphone, ArrowRight, CheckCircle2,
-  Star, TrendingUp, Zap, Lock,
+  Star, TrendingUp, Zap, Lock, UserPlus, LayoutDashboard,
+  ClipboardCheck, BellRing,
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /* ─── tiny animated number counter ─── */
 function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -36,32 +39,16 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
   return <span ref={ref}>{display.toLocaleString()}{suffix}</span>;
 }
 
-/* Two-tone brand palette used consistently across cards — full class
-   strings so Tailwind's JIT scanner can pick them up. */
-const TINTS = [
-  {
-    blob: "from-primary/15 to-primary/0",
-    badge: "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30",
-  },
-  {
-    blob: "from-accent/15 to-accent/0",
-    badge: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-accent/30",
-  },
-];
-
-const ROLE_STYLES = [
-  { bar: "from-primary to-primary/70", badge: "from-primary to-primary/70", ring: "ring-primary/20" },
-  { bar: "from-accent to-accent/70", badge: "from-accent to-accent/70", ring: "ring-accent/20" },
-  { bar: "from-primary to-accent", badge: "from-primary to-accent", ring: "ring-primary/15" },
-];
+const ROLE_BADGE = ["bg-primary", "bg-accent", "bg-primary"];
+const ROLE_BAR = ["bg-primary", "bg-accent", "bg-primary"];
 
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
-  const mainRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const isArabic = i18n.language.startsWith("ar");
 
   const toggleLanguage = () => {
-    const newLang = i18n.language === "en" ? "ar" : "en";
+    const newLang = isArabic ? "en" : "ar";
     i18n.changeLanguage(newLang);
     document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr";
   };
@@ -70,67 +57,6 @@ const LandingPage = () => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from("[data-hero] > *", {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.18,
-        ease: "power4.out",
-      });
-
-      gsap.from("[data-stat]", {
-        y: 40,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-stats]", start: "top 85%" },
-      });
-
-      gsap.from("[data-feature]", {
-        y: 60,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-features]", start: "top 80%" },
-      });
-
-      gsap.utils.toArray<HTMLElement>("[data-heading]").forEach((el) => {
-        gsap.from(el, {
-          y: 35,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 88%" },
-        });
-      });
-
-      gsap.from("[data-role]", {
-        y: 60,
-        opacity: 0,
-        scale: 0.95,
-        duration: 0.7,
-        stagger: 0.14,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-roles]", start: "top 80%" },
-      });
-
-      gsap.from("[data-cta] > *", {
-        y: 40,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.14,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "[data-cta]", start: "top 88%" },
-      });
-    }, mainRef);
-
-    return () => ctx.revert();
   }, []);
 
   const features = [
@@ -166,35 +92,44 @@ const LandingPage = () => {
     { icon: TrendingUp, text: t("landing.trustImproving") },
   ];
 
+  const processIcons = [UserPlus, LayoutDashboard, ClipboardCheck, BellRing];
+  const processSteps = t("landing.processSteps", { returnObjects: true }) as { title: string; desc: string }[];
+  const faqItems = t("landing.faqItems", { returnObjects: true }) as { q: string; a: string }[];
+
   return (
-    <div ref={mainRef} className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="landing-theme min-h-screen bg-background text-foreground overflow-x-hidden">
       {/* ── Navbar ── */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "border-b border-border/60 bg-background/85 backdrop-blur-xl shadow-sm"
-            : "bg-transparent"
+        className={`sticky top-0 z-50 transition-all duration-300 bg-background/90 backdrop-blur-md ${
+          scrolled ? "border-b border-border shadow-sm" : "border-b border-transparent"
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/25">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-lg font-bold tracking-tight">{t("app.title")}</span>
           </div>
 
+          {/* Nav links */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#features" className="hover:text-foreground transition-colors">{t("landing.navFeatures")}</a>
+            <a href="#process" className="hover:text-foreground transition-colors">{t("landing.navProcess")}</a>
+            <a href="#faq" className="hover:text-foreground transition-colors">{t("landing.navFaq")}</a>
+          </nav>
+
           {/* Nav actions */}
           <div className="flex items-center gap-1 sm:gap-2">
             <Button variant="ghost" size="sm" onClick={toggleLanguage} className="gap-1.5 text-muted-foreground hover:text-foreground px-2 sm:px-3">
               <Globe className="h-4 w-4" />
-              <span className="hidden sm:inline">{i18n.language === "en" ? "العربية" : "English"}</span>
+              <span className="hidden sm:inline">{isArabic ? "English" : "العربية"}</span>
             </Button>
             <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground hidden sm:inline-flex">
               <Link to="/login">{t("auth.login")}</Link>
             </Button>
-            <Button size="sm" asChild className="bg-primary shadow-md shadow-primary/30 hover:shadow-primary/40 hover:shadow-lg transition-shadow">
+            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
               <Link to="/register">{t("auth.register")}</Link>
             </Button>
           </div>
@@ -202,40 +137,25 @@ const LandingPage = () => {
       </header>
 
       {/* ── Hero ── */}
-      <section
-        className="relative overflow-hidden py-24 sm:py-36"
-        style={{
-          backgroundImage: `
-            linear-gradient(to bottom, hsl(220 45% 6% / 0.82) 0%, hsl(220 45% 8% / 0.62) 45%, hsl(var(--background)) 100%),
-            url('/hero-bg.png')
-          `,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        {/* Soft brand glows for depth */}
-        <div className="pointer-events-none absolute -top-24 -left-24 -z-0 h-96 w-96 rounded-full bg-primary/25 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-24 -right-24 -z-0 h-96 w-96 rounded-full bg-accent/20 blur-[120px]" />
+      <section className="relative overflow-hidden py-20 sm:py-28">
+        <div className="pointer-events-none absolute -top-32 -right-32 -z-0 h-96 w-96 rounded-full bg-primary/10 blur-[100px]" />
+        <div className="pointer-events-none absolute -bottom-32 -left-32 -z-0 h-96 w-96 rounded-full bg-accent/10 blur-[100px]" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div data-hero className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative">
+          <div className="mx-auto max-w-4xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white mb-8 backdrop-blur-md">
-              <Star className="h-3.5 w-3.5 fill-white" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-1.5 text-sm font-medium text-primary mb-8">
+              <Star className="h-3.5 w-3.5 fill-primary" />
               {t("landing.badge")}
             </div>
 
             {/* Headline */}
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl lg:text-7xl leading-[1.08]">
-              <span className="block text-white">{t("landing.heroTitle")}</span>
-              <span className="block mt-2 bg-[linear-gradient(to_right,hsl(213_95%_72%),hsl(160_75%_62%))] bg-clip-text text-transparent">
-                {t("app.title")}
-              </span>
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-[1.1]">
+              {t("landing.heroTitle")}
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-white/75 leading-relaxed lg:text-xl max-w-2xl mx-auto">
+            <p className="mt-5 sm:mt-7 text-base sm:text-lg text-muted-foreground leading-relaxed lg:text-xl max-w-2xl mx-auto">
               {t("landing.heroSubtitle")}
             </p>
 
@@ -243,7 +163,7 @@ const LandingPage = () => {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
                 size="lg"
-                className="w-full sm:w-auto text-base px-8 shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="w-full sm:w-auto text-base px-8 bg-primary text-primary-foreground hover:bg-primary/90"
                 asChild
               >
                 <Link to="/register">
@@ -254,7 +174,7 @@ const LandingPage = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto text-base px-8 border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 hover:text-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                className="w-full sm:w-auto text-base px-8 border-border text-foreground hover:bg-muted"
                 asChild
               >
                 <Link to="/login">{t("landing.signIn")}</Link>
@@ -264,8 +184,8 @@ const LandingPage = () => {
             {/* Trust badges */}
             <div className="mt-12 flex items-center justify-center gap-6 flex-wrap">
               {trustBadges.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-xs text-white/70">
-                  <Icon className="h-3.5 w-3.5 text-white/90" />
+                <div key={text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Icon className="h-3.5 w-3.5 text-primary" />
                   {text}
                 </div>
               ))}
@@ -275,8 +195,7 @@ const LandingPage = () => {
       </section>
 
       {/* ── Stats ── */}
-      <section data-stats className="relative py-14 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
+      <section className="py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
             {[
@@ -287,10 +206,9 @@ const LandingPage = () => {
             ].map((stat) => (
               <div
                 key={stat.label}
-                data-stat
-                className="group relative rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6 text-center shadow-sm hover:shadow-md hover:border-primary/25 transition-all duration-300"
+                className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm"
               >
-                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <p className="text-2xl sm:text-4xl font-extrabold text-primary">
                   <AnimatedNumber target={stat.value} suffix={stat.suffix} />
                 </p>
                 <p className="mt-2 text-sm font-medium text-muted-foreground">{stat.label}</p>
@@ -301,10 +219,10 @@ const LandingPage = () => {
       </section>
 
       {/* ── Features ── */}
-      <section data-features className="py-24 sm:py-32">
+      <section id="features" className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div data-heading className="text-center mb-16">
-            <span className="inline-block rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+          <div className="text-center mb-16">
+            <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
               {t("landing.kickerFeatures")}
             </span>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.featuresTitle")}</h2>
@@ -312,25 +230,48 @@ const LandingPage = () => {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f, i) => {
-              const tint = TINTS[i % TINTS.length];
+            {features.map((f) => (
+              <div
+                key={f.title}
+                className="group rounded-2xl border border-border bg-card p-6
+                           hover:border-primary/40 hover:shadow-lg hover:-translate-y-1
+                           transition-all duration-300"
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Process ── */}
+      <section id="process" className="py-24 sm:py-32 bg-muted/40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+              {t("landing.kickerProcess")}
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.processTitle")}</h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.processSubtitle")}</p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-4">
+            {processSteps.map((step, i) => {
+              const Icon = processIcons[i % processIcons.length];
               return (
-                <div
-                  key={f.title}
-                  data-feature
-                  className="group relative rounded-2xl border border-border/50 bg-card p-6 overflow-hidden cursor-default
-                             hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1
-                             transition-all duration-300"
-                >
-                  {/* gradient bg blob */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${tint.blob} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                  <div className="relative z-10">
-                    <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl group-hover:shadow-lg transition-all duration-300 ${tint.badge}`}>
-                      <f.icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                <div key={step.title} className="relative text-center md:text-start">
+                  <div className="mx-auto md:mx-0 mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary bg-card text-primary font-bold">
+                    <Icon className="h-6 w-6" />
                   </div>
+                  <span className="block text-xs font-semibold text-primary mb-1">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
                 </div>
               );
             })}
@@ -339,11 +280,10 @@ const LandingPage = () => {
       </section>
 
       {/* ── Roles ── */}
-      <section data-roles className="relative py-24 sm:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-          <div data-heading className="text-center mb-16">
-            <span className="inline-block rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+      <section className="py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
               {t("landing.kickerRoles")}
             </span>
             <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.rolesTitle")}</h2>
@@ -351,85 +291,98 @@ const LandingPage = () => {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
-            {roles.map((r, i) => {
-              const style = ROLE_STYLES[i % ROLE_STYLES.length];
-              return (
-                <div
-                  key={r.role}
-                  data-role
-                  className={`group relative rounded-2xl border bg-card overflow-hidden shadow-sm
-                              ring-1 ${style.ring} hover:ring-2 hover:-translate-y-1 hover:shadow-xl
-                              transition-all duration-300`}
-                >
-                  {/* Top gradient bar */}
-                  <div className={`h-1.5 w-full bg-gradient-to-r ${style.bar}`} />
-                  <div className="p-7">
-                    <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${style.badge} shadow-lg text-white`}>
-                      <r.icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-5">{r.role}</h3>
-                    <ul className="space-y-3">
-                      {(Array.isArray(r.items) ? r.items : []).map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground group-hover:text-foreground/80 transition-colors">
-                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+            {roles.map((r, i) => (
+              <div
+                key={r.role}
+                className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm
+                           hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className={`h-1.5 w-full ${ROLE_BAR[i % ROLE_BAR.length]}`} />
+                <div className="p-7">
+                  <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl text-white ${ROLE_BADGE[i % ROLE_BADGE.length]}`}>
+                    <r.icon className="h-5 w-5" />
                   </div>
+                  <h3 className="text-xl font-bold mb-5">{r.role}</h3>
+                  <ul className="space-y-3">
+                    {(Array.isArray(r.items) ? r.items : []).map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="py-24 sm:py-32 bg-muted/40">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-4">
+              {t("landing.kickerFaq")}
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.faqTitle")}</h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.faqSubtitle")}</p>
+          </div>
+
+          <Accordion type="single" collapsible className="rounded-2xl border border-border bg-card px-6">
+            {faqItems.map((item, idx) => (
+              <AccordionItem key={item.q} value={`item-${idx}`} className={idx === faqItems.length - 1 ? "border-b-0" : ""}>
+                <AccordionTrigger className="text-start text-base font-semibold hover:no-underline">
+                  {item.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {item.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
       {/* ── CTA ── */}
       <section className="py-24 sm:py-32">
-        <div data-cta className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden border border-primary/20 shadow-2xl shadow-primary/10">
-            {/* Background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
-            <div className="absolute inset-0" style={{
-              backgroundImage: "radial-gradient(circle at 70% 50%, hsl(var(--primary)/0.12), transparent 60%)",
-            }} />
-            <div className="relative z-10 text-center px-8 py-16 sm:px-16 sm:py-20">
-              <span className="inline-block rounded-full bg-primary/15 border border-primary/25 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-widest mb-6">
-                {t("landing.kickerCta")}
-              </span>
-              <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">{t("landing.ctaTitle")}</h2>
-              <p className="mt-5 text-muted-foreground text-lg max-w-xl mx-auto">{t("landing.ctaSubtitle")}</p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="text-base px-10 shadow-xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
-                  asChild
-                >
-                  <Link to="/register">
-                    {t("landing.ctaButton")}
-                    <ArrowRight className="h-4 w-4 ms-2" />
-                  </Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="text-base px-10 bg-background/40 backdrop-blur-sm hover:bg-muted/50 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
-                  asChild
-                >
-                  <Link to="/login">{t("auth.login")}</Link>
-                </Button>
-              </div>
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl bg-accent text-center px-8 py-16 sm:px-16 sm:py-20">
+            <span className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white uppercase tracking-widest mb-6">
+              {t("landing.kickerCta")}
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl text-white">{t("landing.ctaTitle")}</h2>
+            <p className="mt-5 text-white/70 text-lg max-w-xl mx-auto">{t("landing.ctaSubtitle")}</p>
+            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                className="text-base px-10 bg-primary text-primary-foreground hover:bg-primary/90"
+                asChild
+              >
+                <Link to="/register">
+                  {t("landing.ctaButton")}
+                  <ArrowRight className="h-4 w-4 ms-2" />
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-base px-10 bg-transparent border-white/25 text-white hover:bg-white/10 hover:text-white"
+                asChild
+              >
+                <Link to="/login">{t("auth.login")}</Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-border/60 bg-muted/20 py-10">
+      <footer className="border-t border-border bg-muted/40 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-secondary text-primary">
                 <Building2 className="h-4 w-4" />
               </div>
               <span className="font-semibold text-sm">{t("app.title")}</span>
@@ -439,7 +392,7 @@ const LandingPage = () => {
             </p>
             <Button variant="ghost" size="sm" onClick={toggleLanguage} className="text-xs text-muted-foreground gap-1.5">
               <Globe className="h-3.5 w-3.5" />
-              {i18n.language === "en" ? "العربية" : "English"}
+              {isArabic ? "English" : "العربية"}
             </Button>
           </div>
         </div>

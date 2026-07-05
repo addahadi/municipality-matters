@@ -359,9 +359,62 @@
     "kickerFeatures": "Platform Features",
     "kickerRoles": "Who It's For",
     "kickerCta": "Get Started Today",
+    "kickerProcess": "How It Works",
+    "kickerFaq": "Frequently Asked Questions",
     "trustSecure": "Secure & Encrypted",
     "trustFast": "Lightning Fast",
-    "trustImproving": "Always Improving"
+    "trustImproving": "Always Improving",
+    "navFeatures": "Features",
+    "navProcess": "How It Works",
+    "navFaq": "FAQ",
+    "processTitle": "Get Started in Minutes",
+    "processSubtitle": "A simple, guided path from sign-up to your first request or listing.",
+    "processSteps": [
+      {
+        "title": "Create your account",
+        "desc": "Sign up as a citizen, employee, or administrator — verification takes just a few minutes."
+      },
+      {
+        "title": "Access your dashboard",
+        "desc": "Your role automatically unlocks the right tools, from property records to service requests."
+      },
+      {
+        "title": "Manage or request services",
+        "desc": "Register properties, run auctions, issue invoices, or submit and track citizen requests."
+      },
+      {
+        "title": "Stay informed",
+        "desc": "Get real-time notifications, status updates, and bilingual announcements as things happen."
+      }
+    ],
+    "faqTitle": "Frequently Asked Questions",
+    "faqSubtitle": "Everything you need to know before you get started.",
+    "faqItems": [
+      {
+        "q": "Who can create an account on the platform?",
+        "a": "Anyone can register as a citizen. Employee and administrator accounts are provisioned by the municipality and come with role-specific permissions."
+      },
+      {
+        "q": "Is my personal and financial data secure?",
+        "a": "Yes. All data is encrypted in transit and at rest, and access is restricted by role-based permissions so users only see what's relevant to them."
+      },
+      {
+        "q": "How do I submit or track a service request?",
+        "a": "Once logged in, citizens can submit requests from their dashboard and follow status updates in real time until an employee resolves them."
+      },
+      {
+        "q": "Can I pay invoices online?",
+        "a": "Yes, invoices can be paid securely online via Edahabia, with your balance and payment history updated automatically."
+      },
+      {
+        "q": "How do public auctions work?",
+        "a": "Municipalities list properties for auction with transparent, real-time bidding, automated pricing, and a full audit trail for every bid."
+      },
+      {
+        "q": "Is the platform available in Arabic?",
+        "a": "Yes, the entire platform supports both English and Arabic, including full right-to-left layout support."
+      }
+    ]
   },
   "time": {
     "days": "D",
