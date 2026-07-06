@@ -192,6 +192,7 @@
 /* Landing page theme — light, navy + teal palette, scoped so the rest of
    the app (dashboard, auth pages) keeps its own primary/accent tokens. */
 .landing-theme {
+  /* ── Official civic palette: deep navy + restrained gold, teal as tertiary ── */
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
 
@@ -201,19 +202,25 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
 
-  --primary: 173 80% 32%;
+  --primary: 222 47% 18%;            /* deep institutional navy */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 173 45% 95%;
-  --secondary-foreground: 173 80% 22%;
+  --secondary: 222 30% 96%;          /* pale navy tint (section backgrounds) */
+  --secondary-foreground: 222 47% 20%;
 
   --muted: 210 25% 96%;
-  --muted-foreground: 220 10% 45%;
+  --muted-foreground: 220 12% 42%;
 
-  --accent: 222 47% 16%;
+  --accent: 222 40% 27%;             /* lighter navy for layered surfaces */
   --accent-foreground: 0 0% 100%;
 
-  --border: 210 20% 90%;
-  --input: 210 20% 88%;
-  --ring: 173 80% 32%;
+  --border: 214 22% 90%;
+  --input: 214 22% 88%;
+  --ring: 41 46% 48%;                /* gold focus ring (visible + on-brand) */
+
+  /* ── New landing-only civic tokens (used via arbitrary Tailwind values) ── */
+  --landing-gold: 41 46% 48%;              /* restrained brass gold */
+  --landing-gold-foreground: 222 47% 12%;
+  --landing-teal: 173 70% 34%;             /* tertiary tie to the in-app teal */
+  --landing-navy-deep: 222 50% 12%;        /* 3D scene / deep panels */
 }

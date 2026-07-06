@@ -355,7 +355,7 @@
     "ctaTitle": "Ready to Get Started?",
     "ctaSubtitle": "Join thousands of citizens using our platform for seamless municipal services.",
     "ctaButton": "Create Your Account",
-    "footerRights": "All rights reserved.",
+    "footerRights": "© {{year}} Municipal Property Management. All rights reserved.",
     "kickerFeatures": "Platform Features",
     "kickerRoles": "Who It's For",
     "kickerCta": "Get Started Today",
@@ -414,7 +414,61 @@
         "q": "Is the platform available in Arabic?",
         "a": "Yes, the entire platform supports both English and Arabic, including full right-to-left layout support."
       }
-    ]
+    ],
+    "navServices": "Services",
+    "navSecurity": "Security",
+    "kickerServices": "e-Services",
+    "kickerAnnounce": "Latest updates",
+    "kickerSecurity": "Trust & protection",
+    "servicesTitle": "Every municipal service, in one place",
+    "servicesSubtitle": "Handle your property, payments, requests and documents online — no queues, no paper, available in Arabic and English.",
+    "eServiceProperties": "Property register",
+    "eServicePropertiesDesc": "View and manage municipal property records and ownership files.",
+    "eServiceAuctions": "Public auctions",
+    "eServiceAuctionsDesc": "Browse open auctions and place bids on municipal assets.",
+    "eServiceInvoices": "Invoices & payments",
+    "eServiceInvoicesDesc": "Pay fees and taxes securely with your Dahabia card.",
+    "eServiceRequests": "Service requests",
+    "eServiceRequestsDesc": "Submit and track requests for permits and certificates.",
+    "eServiceComplaints": "Complaints",
+    "eServiceComplaintsDesc": "Report issues and follow their resolution end to end.",
+    "eServiceDocuments": "Official documents",
+    "eServiceDocumentsDesc": "Request certified documents and download them online.",
+    "eServiceRentals": "Rentals",
+    "eServiceRentalsDesc": "Apply for and manage municipal rental contracts.",
+    "eServiceAnnouncements": "Announcements",
+    "eServiceAnnouncementsDesc": "Stay informed about official notices and deadlines.",
+    "announceTitle": "Notices from your commune",
+    "announceSubtitle": "Official announcements, deadlines and public notices — published as they happen.",
+    "announceViewAll": "View all",
+    "announceItems": [
+      {
+        "title": "Public auction for municipal land — Lot 14 opens for bidding",
+        "date": "12 Jun 2026",
+        "tag": "Auction"
+      },
+      {
+        "title": "Property tax payment window now open via Dahabia",
+        "date": "05 Jun 2026",
+        "tag": "Payments"
+      },
+      {
+        "title": "New online service: request birth and residence certificates",
+        "date": "28 May 2026",
+        "tag": "Service"
+      }
+    ],
+    "securityTitle": "Built for public trust",
+    "securitySubtitle": "Your data and payments are protected with the same standards public institutions require.",
+    "securityEncryption": "Encrypted end to end",
+    "securityEncryptionDesc": "All data is encrypted in transit and at rest.",
+    "securityDahabia": "Secure Dahabia payments",
+    "securityDahabiaDesc": "Payments run through the national Dahabia gateway.",
+    "securityPrivacy": "Privacy by design",
+    "securityPrivacyDesc": "We collect only what a service genuinely needs.",
+    "securityAudit": "Full audit trail",
+    "securityAuditDesc": "Every action is logged for accountability.",
+    "securityNote": "Verified & secure"
   },
   "time": {
     "days": "D",
